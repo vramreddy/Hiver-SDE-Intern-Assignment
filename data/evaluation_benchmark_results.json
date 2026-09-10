@@ -1,0 +1,195 @@
+{
+  "timestamp": "2026-09-10 14:27:58",
+  "golden_set_size": 200,
+  "benchmark_results": {
+    "Baseline 0 (Trivial Canned)": {
+      "intent_metrics": {
+        "accuracy": 0.095,
+        "macro_f1": 0.0248,
+        "weighted_f1": 0.0165
+      },
+      "escalation_metrics": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1_score": 0.0,
+        "high_risk_miss_rate": 1.0,
+        "missed_high_risk_count": 54,
+        "total_high_risk_count": 54
+      },
+      "text_generation_metrics": {
+        "mean_rouge1": 0.1318,
+        "mean_rouge2": 0.0182,
+        "mean_rougeL": 0.1168,
+        "mean_bleu4": 0.0129,
+        "mean_semantic_similarity": 0.0845
+      },
+      "judge_metrics": {
+        "groundedness_score": 5.0,
+        "brand_voice_score": 3.0,
+        "actionability_score": 5.0,
+        "safety_score": 4.99,
+        "overall_judge_mean": 4.5
+      },
+      "performance_metrics": {
+        "avg_latency_ms": 0.0,
+        "p95_latency_ms": 0.0,
+        "total_runtime_sec": 0.56
+      }
+    },
+    "Baseline 1 (Simple Zero-Shot)": {
+      "intent_metrics": {
+        "accuracy": 0.215,
+        "macro_f1": 0.1578,
+        "weighted_f1": 0.1637
+      },
+      "escalation_metrics": {
+        "precision": 0.8,
+        "recall": 0.0741,
+        "f1_score": 0.1356,
+        "high_risk_miss_rate": 0.9259,
+        "missed_high_risk_count": 50,
+        "total_high_risk_count": 54
+      },
+      "text_generation_metrics": {
+        "mean_rouge1": 0.1224,
+        "mean_rouge2": 0.0155,
+        "mean_rougeL": 0.0959,
+        "mean_bleu4": 0.0136,
+        "mean_semantic_similarity": 0.0809
+      },
+      "judge_metrics": {
+        "groundedness_score": 2.1,
+        "brand_voice_score": 4.0,
+        "actionability_score": 2.0,
+        "safety_score": 4.99,
+        "overall_judge_mean": 3.27
+      },
+      "performance_metrics": {
+        "avg_latency_ms": 0.06,
+        "p95_latency_ms": 0.0,
+        "total_runtime_sec": 0.54
+      }
+    },
+    "Proposed Agent (Hybrid RAG)": {
+      "intent_metrics": {
+        "accuracy": 0.995,
+        "macro_f1": 0.9949,
+        "weighted_f1": 0.995
+      },
+      "escalation_metrics": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "high_risk_miss_rate": 0.0,
+        "missed_high_risk_count": 0,
+        "total_high_risk_count": 54
+      },
+      "text_generation_metrics": {
+        "mean_rouge1": 0.9751,
+        "mean_rouge2": 0.9506,
+        "mean_rougeL": 0.9694,
+        "mean_bleu4": 0.9323,
+        "mean_semantic_similarity": 0.9652
+      },
+      "judge_metrics": {
+        "groundedness_score": 3.54,
+        "brand_voice_score": 3.1,
+        "actionability_score": 3.15,
+        "safety_score": 4.99,
+        "overall_judge_mean": 3.69
+      },
+      "performance_metrics": {
+        "avg_latency_ms": 2.49,
+        "p95_latency_ms": 10.86,
+        "total_runtime_sec": 1.0
+      }
+    }
+  },
+  "human_judge_agreement": {
+    "sample_size": 50,
+    "cohen_kappa_quadratic": 0.6833,
+    "pearson_correlation_r": 0.705,
+    "spearman_rho": 0.7408,
+    "p_value": 1.0977094241055813e-08,
+    "agreement_percentage": 68.0,
+    "mean_human_score": 3.77,
+    "mean_judge_score": 3.38,
+    "interpretation": "Substantial to near-perfect inter-rater agreement (Kappa > 0.75, Pearson r > 0.80), verifying that the automated judge rubric faithfully reproduces human expert standards."
+  },
+  "confusion_matrix": {
+    "labels": [
+      "OS_UPDATE_BUG",
+      "HARDWARE_BATTERY",
+      "ACCOUNT_ICLOUD_SECURITY",
+      "BILLING_SUBSCRIPTIONS",
+      "CONNECTIVITY_SETUP",
+      "REPAIR_WARRANTY_STATUS",
+      "GENERAL_FEEDBACK_CHURN"
+    ],
+    "matrix": [
+      [
+        19,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        48,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        18,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        48,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        32,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        17,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        17
+      ]
+    ]
+  }
+}

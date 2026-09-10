@@ -1,0 +1,2002 @@
+[
+  {
+    "id": "gold_001",
+    "customer_tweet": "@AppleSupport Ever since updating to iOS 17.3, my iPhone 14 Pro keeps freezing whenever I open Camera from the lock screen.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help with the Camera freezing on iOS 17.3. Have you tried a force restart yet? Follow: https://apple.co/force-restart. If it continues, let us know!",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "EASY",
+    "notes": "Standard camera crash after update."
+  },
+  {
+    "id": "gold_002",
+    "customer_tweet": "@AppleSupport My MacBook Pro M1 kernel panicked 3 times today right after the macOS 14.2 update. Panic log mentions WindowServer.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to check into these kernel panics. Please send us a DM with the exact panic log excerpt and we'll investigate further.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Technical panic log requiring specialist DM investigation."
+  },
+  {
+    "id": "gold_003",
+    "customer_tweet": "@AppleSupport Brilliant new feature in iOS 17 where alarms just decide to stay completely silent and make me late for work! \ud83d\ude21",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We understand how frustrating missed alarms are. Check Settings > Face ID & Attention and try toggling 'Attention Aware Features' off to see if alarm volume stabilizes.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "HARD",
+    "notes": "Sarcastic complaint about Attention Aware feature alarm bug."
+  },
+  {
+    "id": "gold_004",
+    "customer_tweet": "@AppleSupport iPad mini 6 is stuck on the black Apple logo screen during update. Progress bar hasn't moved in 5 hours.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "Connect your iPad to a computer, enter Recovery Mode, and choose 'Update' in Finder/iTunes to safely reinstall iPadOS: https://apple.co/recovery-mode.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Stuck progress bar update."
+  },
+  {
+    "id": "gold_005",
+    "customer_tweet": "@AppleSupport WatchOS 10 completely ruined my battery life and my Apple Watch battery swells up when on the magnetic charger!!",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Please stop charging and wearing the Apple Watch immediately. Send us a DM so an advisor can arrange immediate hardware inspection.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Adversarial multi-intent: mentions software update, but physical swelling is dangerous hardware priority."
+  },
+  {
+    "id": "gold_006",
+    "customer_tweet": "@AppleSupport My iPhone 13 battery health says 'Service' and maximum capacity is 72%. Is it safe to keep using?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Your iPhone is safe to use, but you may experience reduced battery life. You can schedule a battery replacement at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Standard degraded battery inquiry."
+  },
+  {
+    "id": "gold_007",
+    "customer_tweet": "@AppleSupport iPhone 15 Pro gets scorchingly hot to the touch while playing games, almost burning my fingers.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Your safety is our priority. Please ensure your device is updated to the latest iOS which includes thermal fixes. If heating persists, DM us to run a diagnostic.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "MEDIUM",
+    "notes": "Thermal overheating issue requiring diagnostic DM."
+  },
+  {
+    "id": "gold_008",
+    "customer_tweet": "@AppleSupport Dropped my iPad Pro in the bathtub while watching YouTube. It was submerged for 10 seconds. What should I do?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Power off the iPad immediately and do not plug it in to charge. Allow it to air dry for at least 24-48 hours. DM us if you need repair assistance.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Liquid contact requiring safety precautions."
+  },
+  {
+    "id": "gold_009",
+    "customer_tweet": "@AppleSupport Someone in another state just logged into my Apple ID and changed my trusted phone number! HELP PLEASE!",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Please DM us immediately so our security team can assist you with securing your Apple ID account right away.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Account takeover / high urgency security incident."
+  },
+  {
+    "id": "gold_010",
+    "customer_tweet": "@AppleSupport How do I change my iCloud storage plan from 200GB to 2TB on my iPhone?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Go to Settings > [Your Name] > iCloud > Manage Account Storage > Change Storage Plan, and select 2TB.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "EASY",
+    "notes": "Simple self-serve account storage configuration."
+  },
+  {
+    "id": "gold_011",
+    "customer_tweet": "@AppleSupport I forgot my Apple ID passcode and my device is disabled. Can you reset it for me over Twitter?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "We cannot reset passwords over social media for security. You can reset your password securely at https://iforgot.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "PII request trap: must not attempt social media reset, direct to iforgot."
+  },
+  {
+    "id": "gold_012",
+    "customer_tweet": "@AppleSupport You guys charged my bank account $120 for an annual Tinder subscription I never agreed to! Refund me now or I'm calling my lawyer.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "We understand your concern. You can view all purchases and submit an immediate refund request at https://reportaproblem.apple.com. DM us if you need help.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "BILLING_REFUND_AUTH",
+    "difficulty": "HARD",
+    "notes": "High frustration legal threat over disputed charge."
+  },
+  {
+    "id": "gold_013",
+    "customer_tweet": "@AppleSupport Where do I cancel my Apple Arcade subscription so it doesn't renew next month?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Go to Settings > [Your Name] > Subscriptions > tap Apple Arcade > Cancel Subscription.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "EASY",
+    "notes": "Standard self-serve subscription cancellation."
+  },
+  {
+    "id": "gold_014",
+    "customer_tweet": "@AppleSupport Why does my App Store receipt say pending for 3 days and won't let me download free apps?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "A pending transaction or unpaid balance can pause downloads. Update your payment method in Settings > [Your Name] > Payment & Shipping to clear the balance.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "App store pending unpaid balance."
+  },
+  {
+    "id": "gold_015",
+    "customer_tweet": "@AppleSupport My AirPods Pro right earbud has zero sound and won't show in the battery widget.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Try cleaning the charging contacts in the case with a dry cotton swab, then reset your AirPods: https://apple.co/reset-airpods. If unresolved, DM us!",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "EASY",
+    "notes": "AirPods single earbud connectivity/charging issue."
+  },
+  {
+    "id": "gold_016",
+    "customer_tweet": "@AppleSupport Wi-Fi button on my iPhone is greyed out and Bluetooth toggle spins forever.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "A greyed-out Wi-Fi toggle can indicate a hardware module issue. Please DM us so we can guide you on diagnostic and repair options.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Greyed-out Wi-Fi hardware indicator."
+  },
+  {
+    "id": "gold_017",
+    "customer_tweet": "@AppleSupport How do I book an appointment at the Regent Street Apple Store for a screen replacement tomorrow?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "You can schedule a Genius Bar reservation directly via the Apple Support app or online at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Genius Bar booking link."
+  },
+  {
+    "id": "gold_018",
+    "customer_tweet": "@AppleSupport Repair # D8392190 was supposed to arrive yesterday. FedEx says package was returned to sender at Apple depot.",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "We want to help track down your repair package. Please DM us your Repair ID and current shipping address so we can investigate with our logistics team.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Specific repair tracking exception requiring PII DM."
+  },
+  {
+    "id": "gold_019",
+    "customer_tweet": "@AppleSupport Why did you remove the battery percentage from the status bar in older models? Such a terrible design decision.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We appreciate you sharing your thoughts on iOS UI design. You can submit official product feedback directly to our designers at https://apple.com/feedback.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "General product complaint / feedback."
+  },
+  {
+    "id": "gold_020",
+    "customer_tweet": "@AppleSupport 3 hours at the retail store today and your staff refused to honor my AppleCare+! I want a supervisor right now!",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We are very sorry for the frustrating retail store experience. Please DM us your store location, case number, and phone number so a senior supervisor can follow up.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Severe in-store escalation request."
+  },
+  {
+    "id": "gold_021",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #21)"
+  },
+  {
+    "id": "gold_022",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #22)"
+  },
+  {
+    "id": "gold_023",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #23)"
+  },
+  {
+    "id": "gold_024",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #24)"
+  },
+  {
+    "id": "gold_025",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #25)"
+  },
+  {
+    "id": "gold_026",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #26)"
+  },
+  {
+    "id": "gold_027",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #27)"
+  },
+  {
+    "id": "gold_028",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #28)"
+  },
+  {
+    "id": "gold_029",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #29)"
+  },
+  {
+    "id": "gold_030",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #30)"
+  },
+  {
+    "id": "gold_031",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #31)"
+  },
+  {
+    "id": "gold_032",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #32)"
+  },
+  {
+    "id": "gold_033",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #33)"
+  },
+  {
+    "id": "gold_034",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #34)"
+  },
+  {
+    "id": "gold_035",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #35)"
+  },
+  {
+    "id": "gold_036",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #36)"
+  },
+  {
+    "id": "gold_037",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #37)"
+  },
+  {
+    "id": "gold_038",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #38)"
+  },
+  {
+    "id": "gold_039",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #39)"
+  },
+  {
+    "id": "gold_040",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #40)"
+  },
+  {
+    "id": "gold_041",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #41)"
+  },
+  {
+    "id": "gold_042",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #42)"
+  },
+  {
+    "id": "gold_043",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #43)"
+  },
+  {
+    "id": "gold_044",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #44)"
+  },
+  {
+    "id": "gold_045",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #45)"
+  },
+  {
+    "id": "gold_046",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #46)"
+  },
+  {
+    "id": "gold_047",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #47)"
+  },
+  {
+    "id": "gold_048",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #48)"
+  },
+  {
+    "id": "gold_049",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #49)"
+  },
+  {
+    "id": "gold_050",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #50)"
+  },
+  {
+    "id": "gold_051",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #51)"
+  },
+  {
+    "id": "gold_052",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #52)"
+  },
+  {
+    "id": "gold_053",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #53)"
+  },
+  {
+    "id": "gold_054",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #54)"
+  },
+  {
+    "id": "gold_055",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #55)"
+  },
+  {
+    "id": "gold_056",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #56)"
+  },
+  {
+    "id": "gold_057",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #57)"
+  },
+  {
+    "id": "gold_058",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #58)"
+  },
+  {
+    "id": "gold_059",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #59)"
+  },
+  {
+    "id": "gold_060",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #60)"
+  },
+  {
+    "id": "gold_061",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #61)"
+  },
+  {
+    "id": "gold_062",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #62)"
+  },
+  {
+    "id": "gold_063",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #63)"
+  },
+  {
+    "id": "gold_064",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #64)"
+  },
+  {
+    "id": "gold_065",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #65)"
+  },
+  {
+    "id": "gold_066",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #66)"
+  },
+  {
+    "id": "gold_067",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #67)"
+  },
+  {
+    "id": "gold_068",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #68)"
+  },
+  {
+    "id": "gold_069",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #69)"
+  },
+  {
+    "id": "gold_070",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #70)"
+  },
+  {
+    "id": "gold_071",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #71)"
+  },
+  {
+    "id": "gold_072",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #72)"
+  },
+  {
+    "id": "gold_073",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #73)"
+  },
+  {
+    "id": "gold_074",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #74)"
+  },
+  {
+    "id": "gold_075",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #75)"
+  },
+  {
+    "id": "gold_076",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #76)"
+  },
+  {
+    "id": "gold_077",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #77)"
+  },
+  {
+    "id": "gold_078",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #78)"
+  },
+  {
+    "id": "gold_079",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #79)"
+  },
+  {
+    "id": "gold_080",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #80)"
+  },
+  {
+    "id": "gold_081",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #81)"
+  },
+  {
+    "id": "gold_082",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #82)"
+  },
+  {
+    "id": "gold_083",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #83)"
+  },
+  {
+    "id": "gold_084",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #84)"
+  },
+  {
+    "id": "gold_085",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #85)"
+  },
+  {
+    "id": "gold_086",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #86)"
+  },
+  {
+    "id": "gold_087",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #87)"
+  },
+  {
+    "id": "gold_088",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #88)"
+  },
+  {
+    "id": "gold_089",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #89)"
+  },
+  {
+    "id": "gold_090",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #90)"
+  },
+  {
+    "id": "gold_091",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #91)"
+  },
+  {
+    "id": "gold_092",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #92)"
+  },
+  {
+    "id": "gold_093",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #93)"
+  },
+  {
+    "id": "gold_094",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #94)"
+  },
+  {
+    "id": "gold_095",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #95)"
+  },
+  {
+    "id": "gold_096",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #96)"
+  },
+  {
+    "id": "gold_097",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #97)"
+  },
+  {
+    "id": "gold_098",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #98)"
+  },
+  {
+    "id": "gold_099",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #99)"
+  },
+  {
+    "id": "gold_100",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #100)"
+  },
+  {
+    "id": "gold_101",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #101)"
+  },
+  {
+    "id": "gold_102",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #102)"
+  },
+  {
+    "id": "gold_103",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #103)"
+  },
+  {
+    "id": "gold_104",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #104)"
+  },
+  {
+    "id": "gold_105",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #105)"
+  },
+  {
+    "id": "gold_106",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #106)"
+  },
+  {
+    "id": "gold_107",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #107)"
+  },
+  {
+    "id": "gold_108",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #108)"
+  },
+  {
+    "id": "gold_109",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #109)"
+  },
+  {
+    "id": "gold_110",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #110)"
+  },
+  {
+    "id": "gold_111",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #111)"
+  },
+  {
+    "id": "gold_112",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #112)"
+  },
+  {
+    "id": "gold_113",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #113)"
+  },
+  {
+    "id": "gold_114",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #114)"
+  },
+  {
+    "id": "gold_115",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #115)"
+  },
+  {
+    "id": "gold_116",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #116)"
+  },
+  {
+    "id": "gold_117",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #117)"
+  },
+  {
+    "id": "gold_118",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #118)"
+  },
+  {
+    "id": "gold_119",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #119)"
+  },
+  {
+    "id": "gold_120",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #120)"
+  },
+  {
+    "id": "gold_121",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #121)"
+  },
+  {
+    "id": "gold_122",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #122)"
+  },
+  {
+    "id": "gold_123",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #123)"
+  },
+  {
+    "id": "gold_124",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #124)"
+  },
+  {
+    "id": "gold_125",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #125)"
+  },
+  {
+    "id": "gold_126",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #126)"
+  },
+  {
+    "id": "gold_127",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #127)"
+  },
+  {
+    "id": "gold_128",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #128)"
+  },
+  {
+    "id": "gold_129",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #129)"
+  },
+  {
+    "id": "gold_130",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #130)"
+  },
+  {
+    "id": "gold_131",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #131)"
+  },
+  {
+    "id": "gold_132",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #132)"
+  },
+  {
+    "id": "gold_133",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #133)"
+  },
+  {
+    "id": "gold_134",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #134)"
+  },
+  {
+    "id": "gold_135",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #135)"
+  },
+  {
+    "id": "gold_136",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #136)"
+  },
+  {
+    "id": "gold_137",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #137)"
+  },
+  {
+    "id": "gold_138",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #138)"
+  },
+  {
+    "id": "gold_139",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #139)"
+  },
+  {
+    "id": "gold_140",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #140)"
+  },
+  {
+    "id": "gold_141",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #141)"
+  },
+  {
+    "id": "gold_142",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #142)"
+  },
+  {
+    "id": "gold_143",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #143)"
+  },
+  {
+    "id": "gold_144",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #144)"
+  },
+  {
+    "id": "gold_145",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #145)"
+  },
+  {
+    "id": "gold_146",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #146)"
+  },
+  {
+    "id": "gold_147",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #147)"
+  },
+  {
+    "id": "gold_148",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #148)"
+  },
+  {
+    "id": "gold_149",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #149)"
+  },
+  {
+    "id": "gold_150",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #150)"
+  },
+  {
+    "id": "gold_151",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #151)"
+  },
+  {
+    "id": "gold_152",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #152)"
+  },
+  {
+    "id": "gold_153",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #153)"
+  },
+  {
+    "id": "gold_154",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #154)"
+  },
+  {
+    "id": "gold_155",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #155)"
+  },
+  {
+    "id": "gold_156",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #156)"
+  },
+  {
+    "id": "gold_157",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #157)"
+  },
+  {
+    "id": "gold_158",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #158)"
+  },
+  {
+    "id": "gold_159",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #159)"
+  },
+  {
+    "id": "gold_160",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #160)"
+  },
+  {
+    "id": "gold_161",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #161)"
+  },
+  {
+    "id": "gold_162",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #162)"
+  },
+  {
+    "id": "gold_163",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #163)"
+  },
+  {
+    "id": "gold_164",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #164)"
+  },
+  {
+    "id": "gold_165",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #165)"
+  },
+  {
+    "id": "gold_166",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #166)"
+  },
+  {
+    "id": "gold_167",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #167)"
+  },
+  {
+    "id": "gold_168",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #168)"
+  },
+  {
+    "id": "gold_169",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #169)"
+  },
+  {
+    "id": "gold_170",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #170)"
+  },
+  {
+    "id": "gold_171",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #171)"
+  },
+  {
+    "id": "gold_172",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #172)"
+  },
+  {
+    "id": "gold_173",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #173)"
+  },
+  {
+    "id": "gold_174",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #174)"
+  },
+  {
+    "id": "gold_175",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #175)"
+  },
+  {
+    "id": "gold_176",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #176)"
+  },
+  {
+    "id": "gold_177",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #177)"
+  },
+  {
+    "id": "gold_178",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #178)"
+  },
+  {
+    "id": "gold_179",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #179)"
+  },
+  {
+    "id": "gold_180",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #180)"
+  },
+  {
+    "id": "gold_181",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #181)"
+  },
+  {
+    "id": "gold_182",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #182)"
+  },
+  {
+    "id": "gold_183",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #183)"
+  },
+  {
+    "id": "gold_184",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #184)"
+  },
+  {
+    "id": "gold_185",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #185)"
+  },
+  {
+    "id": "gold_186",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #186)"
+  },
+  {
+    "id": "gold_187",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #187)"
+  },
+  {
+    "id": "gold_188",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #188)"
+  },
+  {
+    "id": "gold_189",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "ground_truth_intent": "OS_UPDATE_BUG",
+    "reference_reply": "We'd like to help. Check Settings > Accessibility > Display & Text Size > Auto-Brightness, and verify if the device is experiencing high internal temperatures.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Display auto-dimming issue. (Case #189)"
+  },
+  {
+    "id": "gold_190",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "ground_truth_intent": "ACCOUNT_ICLOUD_SECURITY",
+    "reference_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "iCloud deleted photo recovery limitation. (Case #190)"
+  },
+  {
+    "id": "gold_191",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "A physical switch issue may require hardware repair. You can check repair estimates and service locations at https://locate.apple.com.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Physical mute toggle defect. (Case #191)"
+  },
+  {
+    "id": "gold_192",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Please DM us your Apple ID email so we can help you look up the charge details and assist with securing your billing profile.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "PII_SECURITY_DM",
+    "difficulty": "HARD",
+    "notes": "Unauthorized charge / fraud concern. (Case #192)"
+  },
+  {
+    "id": "gold_193",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "CarPlay interference glitch. (Case #193)"
+  },
+  {
+    "id": "gold_194",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Horizontal lines linked to the hinge angle indicate a display flex cable issue. Please DM us to arrange service.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HARDWARE_PHYSICAL_DAMAGE",
+    "difficulty": "HARD",
+    "notes": "Display flex cable hardware failure. (Case #194)"
+  },
+  {
+    "id": "gold_195",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "ground_truth_intent": "HARDWARE_BATTERY",
+    "reference_reply": "Unified memory in Apple Silicon MacBooks is integrated into the chip architecture and cannot be upgraded after purchase.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "EASY",
+    "notes": "Hardware spec limitation question. (Case #195)"
+  },
+  {
+    "id": "gold_196",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "STANDARD_TROUBLESHOOTING",
+    "difficulty": "MEDIUM",
+    "notes": "Apple Music offline sync glitch. (Case #196)"
+  },
+  {
+    "id": "gold_197",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "ground_truth_intent": "REPAIR_WARRANTY_STATUS",
+    "reference_reply": "Water resistance is not permanent and screen physical damage requires AppleCare+ service. Check options at https://support.apple.com/watch/repair.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "Water resistance & physical damage coverage. (Case #197)"
+  },
+  {
+    "id": "gold_198",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "ground_truth_intent": "GENERAL_FEEDBACK_CHURN",
+    "reference_reply": "We sincerely regret your experience. Please DM us your contact details and case history so we can escalate your feedback to executive customer relations.",
+    "ground_truth_escalation": true,
+    "escalation_reason": "HIGH_SENTIMENT_CHURN_RISK",
+    "difficulty": "HARD",
+    "notes": "Executive escalation demand. (Case #198)"
+  },
+  {
+    "id": "gold_199",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "ground_truth_intent": "CONNECTIVITY_SETUP",
+    "reference_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "GENERAL_INFORMATIONAL",
+    "difficulty": "EASY",
+    "notes": "Hardware spec standard question. (Case #199)"
+  },
+  {
+    "id": "gold_200",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "ground_truth_intent": "BILLING_SUBSCRIPTIONS",
+    "reference_reply": "You can submit an immediate refund request at https://reportaproblem.apple.com and enable 'Require Password Immediately' in Screen Time settings.",
+    "ground_truth_escalation": false,
+    "escalation_reason": "PUBLIC_DOCS_GUIDE",
+    "difficulty": "MEDIUM",
+    "notes": "In-app purchase refund & parental controls. (Case #200)"
+  }
+]

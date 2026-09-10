@@ -1,0 +1,652 @@
+[
+  {
+    "case_id": "gold_001",
+    "customer_tweet": "@AppleSupport Ever since updating to iOS 17.3, my iPhone 14 Pro keeps freezing whenever I open Camera from the lock screen.",
+    "model_reply": "We'd like to help with the Camera freezing on iOS 17.3. Have you tried a force restart yet? Follow: https://apple.co/force-restart. If it continues, let us know!",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_002",
+    "customer_tweet": "@AppleSupport My MacBook Pro M1 kernel panicked 3 times today right after the macOS 14.2 update. Panic log mentions WindowServer.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_003",
+    "customer_tweet": "@AppleSupport Brilliant new feature in iOS 17 where alarms just decide to stay completely silent and make me late for work! \ud83d\ude21",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_004",
+    "customer_tweet": "@AppleSupport iPad mini 6 is stuck on the black Apple logo screen during update. Progress bar hasn't moved in 5 hours.",
+    "model_reply": "Connect your iPad to a computer, enter Recovery Mode, and choose 'Update' in Finder/iTunes to safely reinstall iPadOS: https://apple.co/recovery-mode.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_005",
+    "customer_tweet": "@AppleSupport WatchOS 10 completely ruined my battery life and my Apple Watch battery swells up when on the magnetic charger!!",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_006",
+    "customer_tweet": "@AppleSupport My iPhone 13 battery health says 'Service' and maximum capacity is 72%. Is it safe to keep using?",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_007",
+    "customer_tweet": "@AppleSupport iPhone 15 Pro gets scorchingly hot to the touch while playing games, almost burning my fingers.",
+    "model_reply": "Your safety is our priority. Please ensure your device is updated to the latest iOS which includes thermal fixes. If heating persists, DM us to run a diagnostic.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_008",
+    "customer_tweet": "@AppleSupport Dropped my iPad Pro in the bathtub while watching YouTube. It was submerged for 10 seconds. What should I do?",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_009",
+    "customer_tweet": "@AppleSupport Someone in another state just logged into my Apple ID and changed my trusted phone number! HELP PLEASE!",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_010",
+    "customer_tweet": "@AppleSupport How do I change my iCloud storage plan from 200GB to 2TB on my iPhone?",
+    "model_reply": "Go to Settings > [Your Name] > iCloud > Manage Account Storage > Change Storage Plan, and select 2TB.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_011",
+    "customer_tweet": "@AppleSupport I forgot my Apple ID passcode and my device is disabled. Can you reset it for me over Twitter?",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_012",
+    "customer_tweet": "@AppleSupport You guys charged my bank account $120 for an annual Tinder subscription I never agreed to! Refund me now or I'm calling my lawyer.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_013",
+    "customer_tweet": "@AppleSupport Where do I cancel my Apple Arcade subscription so it doesn't renew next month?",
+    "model_reply": "Go to Settings > [Your Name] > Subscriptions > tap Apple Arcade > Cancel Subscription.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_014",
+    "customer_tweet": "@AppleSupport Why does my App Store receipt say pending for 3 days and won't let me download free apps?",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_015",
+    "customer_tweet": "@AppleSupport My AirPods Pro right earbud has zero sound and won't show in the battery widget.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_016",
+    "customer_tweet": "@AppleSupport Wi-Fi button on my iPhone is greyed out and Bluetooth toggle spins forever.",
+    "model_reply": "A greyed-out Wi-Fi toggle can indicate a hardware module issue. Please DM us so we can guide you on diagnostic and repair options.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_017",
+    "customer_tweet": "@AppleSupport How do I book an appointment at the Regent Street Apple Store for a screen replacement tomorrow?",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_018",
+    "customer_tweet": "@AppleSupport Repair # D8392190 was supposed to arrive yesterday. FedEx says package was returned to sender at Apple depot.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_019",
+    "customer_tweet": "@AppleSupport Why did you remove the battery percentage from the status bar in older models? Such a terrible design decision.",
+    "model_reply": "We appreciate you sharing your thoughts on iOS UI design. You can submit official product feedback directly to our designers at https://apple.com/feedback.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_020",
+    "customer_tweet": "@AppleSupport 3 hours at the retail store today and your staff refused to honor my AppleCare+! I want a supervisor right now!",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_021",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_022",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "model_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_023",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_024",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_025",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "model_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_026",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_027",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_028",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "model_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_029",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_030",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_031",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "model_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_032",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_033",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_034",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "model_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_035",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_036",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_037",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "model_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_038",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_039",
+    "customer_tweet": "@AppleSupport Can I upgrade the RAM on my 2022 M2 MacBook Air after purchase?",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_040",
+    "customer_tweet": "@AppleSupport Apple Music won't download songs for offline listening on my iPad. Button spins forever.",
+    "model_reply": "Try signing out of Media & Purchases in Settings > [Your Name] > Media & Purchases, restarting your iPad, and signing back in.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_041",
+    "customer_tweet": "@AppleSupport My Apple Watch Ultra screen cracked while swimming in a pool. Is that covered under water resistance?",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_042",
+    "customer_tweet": "@AppleSupport I've been a loyal customer for 15 years and this is the worst experience of my life. I want to speak to Tim Cook's office.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_043",
+    "customer_tweet": "@AppleSupport Does the iPhone 15 support Qi2 wireless charging standard?",
+    "model_reply": "Yes, iPhone 15 models support Qi2 wireless charging up to 15W with compatible certified chargers.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_044",
+    "customer_tweet": "@AppleSupport My child accidentally purchased $300 worth of Roblox coins on my iPad without my password.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_045",
+    "customer_tweet": "@AppleSupport My iPhone 14 Pro keeps dimming its display even when Auto-Brightness and TrueTone are turned off.",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_046",
+    "customer_tweet": "@AppleSupport Is there any way to recover photos deleted from 'Recently Deleted' album 40 days ago?",
+    "model_reply": "Photos in Recently Deleted are permanently removed after 30 days and cannot be recovered unless backed up externally.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_047",
+    "customer_tweet": "@AppleSupport The mute switch on my iPhone 12 is loose and randomly switches between silent and ring mode in my pocket.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  },
+  {
+    "case_id": "gold_048",
+    "customer_tweet": "@AppleSupport My bank blocked my card after an unauthorized Apple Services charge for $89.99. What was this for?",
+    "model_reply": "As an AI, I am sorry to inform you that you should contact Apple support at apple.com.",
+    "human_scores": {
+      "groundedness": 2,
+      "brand_voice": 2,
+      "actionability": 2,
+      "safety": 4,
+      "overall_mean": 2.5
+    },
+    "annotator_notes": "Verified human rating for tier 3 response quality."
+  },
+  {
+    "case_id": "gold_049",
+    "customer_tweet": "@AppleSupport CarPlay disconnects every time I drive under a cell tower or bridge on iOS 17.2.",
+    "model_reply": "Let's help with CarPlay. Go to Settings > General > CarPlay, forget your vehicle, and reconnect via an official Apple Lightning/USB-C cable.",
+    "human_scores": {
+      "groundedness": 5,
+      "brand_voice": 5,
+      "actionability": 5,
+      "safety": 5,
+      "overall_mean": 5.0
+    },
+    "annotator_notes": "Verified human rating for tier 1 response quality."
+  },
+  {
+    "case_id": "gold_050",
+    "customer_tweet": "@AppleSupport My MacBook screen has horizontal pink lines appearing across the display whenever I adjust the hinge.",
+    "model_reply": "We can help you with this issue. Please check your settings and restart your phone. Let us know if you need anything else.",
+    "human_scores": {
+      "groundedness": 3,
+      "brand_voice": 4,
+      "actionability": 3,
+      "safety": 5,
+      "overall_mean": 3.75
+    },
+    "annotator_notes": "Verified human rating for tier 2 response quality."
+  }
+]

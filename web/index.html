@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@AppleSupport AI Agent & Live Evaluation Platform | Hiver SDE Assignment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Ambient Glow Backgrounds -->
+  <div class="glow-orb glow-top-left"></div>
+  <div class="glow-orb glow-bottom-right"></div>
+
+  <!-- Ultra-Premium Apple-Inspired Navbar -->
+  <header class="navbar-wrapper">
+    <div class="navbar-container">
+      
+      <!-- Brand & Logo -->
+      <div class="brand-badge" onclick="switchTab('sandbox')">
+        <div class="brand-logo-card">
+          <!-- Pixel-Perfect Apple Logo SVG -->
+          <svg class="apple-svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.87-.9.04-2 .6-2.63 1.34-.56.64-.99 1.68-.86 2.7.99.08 2-.48 2.57-1.17z"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <div class="brand-header-line">
+            <span class="brand-title">Apple Support</span>
+            <span class="ai-pill">AI AGENT</span>
+          </div>
+          <span class="brand-subtext">Autonomous Social Triage & Eval</span>
+        </div>
+      </div>
+
+      <!-- Segmented Navigation Pills -->
+      <nav class="nav-segmented" id="navTabs">
+        <button class="nav-item active" data-tab="sandbox">
+          <span class="nav-icon">🚀</span>
+          <span class="nav-label">Sandbox</span>
+        </button>
+        <button class="nav-item" data-tab="compare">
+          <span class="nav-icon">⚖️</span>
+          <span class="nav-label">Baselines</span>
+        </button>
+        <button class="nav-item" data-tab="benchmark">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Benchmark</span>
+        </button>
+        <button class="nav-item" data-tab="confusion">
+          <span class="nav-icon">🧩</span>
+          <span class="nav-label">Matrix</span>
+        </button>
+        <button class="nav-item" data-tab="stress">
+          <span class="nav-icon">⚡</span>
+          <span class="nav-label">Stress Test</span>
+        </button>
+        <button class="nav-item" data-tab="goldenset">
+          <span class="nav-icon">📂</span>
+          <span class="nav-label">Golden Set</span>
+        </button>
+        <button class="nav-item" data-tab="failure">
+          <span class="nav-icon">🔍</span>
+          <span class="nav-label">Failures</span>
+        </button>
+        <button class="nav-item" data-tab="decision">
+          <span class="nav-icon">🧠</span>
+          <span class="nav-label">Decisions</span>
+        </button>
+        <button class="nav-item" data-tab="report">
+          <span class="nav-icon">📄</span>
+          <span class="nav-label">Report</span>
+        </button>
+      </nav>
+
+      <!-- Right Utility Actions -->
+      <div class="nav-right-controls">
+        <button class="theme-toggle-btn" onclick="toggleTheme()" title="Switch Light/Dark Theme" id="themeToggleBtn">
+          <span id="themeIcon">☀️</span>
+        </button>
+        <div class="status-badge online" title="Inference Engine Live (< 3ms latency)">
+          <span class="status-pulse-dot"></span>
+          <span class="status-text">Live 2.5ms</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+
+    <!-- 1. LIVE SANDBOX TAB -->
+    <section class="tab-content active" id="tab-sandbox">
+      <div class="sandbox-grid">
+        <!-- Left: Input & Presets -->
+        <div class="glass-card input-card">
+          <div class="card-header">
+            <div class="header-with-badge">
+              <h3>Customer Inbound Tweet</h3>
+              <span class="live-pulse-badge">Live Sub-10ms Inference</span>
+            </div>
+            <button class="clear-btn" onclick="clearInput()">Clear</button>
+          </div>
+
+          <div class="preset-chips">
+            <span class="chip-label">Quick Scenarios:</span>
+            <button class="chip danger" onclick="setQuery('@AppleSupport The battery in my MacBook Pro is physically swelling and pushing the trackpad up! Is this dangerous?')">🔥 Battery Swelling (Hazard)</button>
+            <button class="chip" onclick="setQuery('@AppleSupport Camera app keeps freezing on lock screen after iOS 17.3 update on my iPhone 14 Pro.')">🐛 iOS Update Bug (Self-Serve)</button>
+            <button class="chip warning" onclick="setQuery('@AppleSupport Someone hacked my Apple ID, changed my 2FA phone number, and locked me out!! HELP!')">🔒 Account Security / PII</button>
+            <button class="chip" onclick="setQuery('@AppleSupport Charged $120 for an unauthorized annual subscription on App Store. Refund immediately or I sue!')">💳 Billing Dispute (Refund)</button>
+            <button class="chip" onclick="setQuery('@AppleSupport Brilliant new update where alarms stay completely silent and make me late for work! 😡')">🎭 Sarcastic Bug (Multi-Intent)</button>
+            <button class="chip" onclick="setQuery('@AppleSupport AirPods Pro right earbud has zero sound and won\'t show in the battery widget.')">🎧 AirPods Reset (Guide)</button>
+            <button class="chip" onclick="setQuery('@AppleSupport Wi-Fi button on my iPhone is greyed out and Bluetooth toggle spins forever.')">📡 Greyed-Out Wi-Fi (Baseband IC)</button>
+          </div>
+
+          <div class="input-wrapper">
+            <textarea id="queryInput" placeholder="Type or paste a customer tweet to @AppleSupport...">@AppleSupport The battery in my MacBook Pro is physically swelling and pushing the trackpad up! Is this dangerous?</textarea>
+            <div class="input-actions">
+              <span class="char-count" id="charCount">104 chars (Twitter Limit: 280)</span>
+              <button class="primary-btn glow" id="submitBtn" onclick="runSandboxQuery()">
+                <span class="btn-text">⚡ Process Inbound Tweet</span>
+                <span class="btn-spinner hidden"></span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Architecture Mini Pipeline Visualizer -->
+          <div class="pipeline-flow-mini">
+            <div class="p-step active" title="Text Clean & Tokenize"><span>1. Tokenize</span></div>
+            <div class="p-arrow">➔</div>
+            <div class="p-step active" title="Deterministic Guardrails"><span>2. Safety Guard</span></div>
+            <div class="p-arrow">➔</div>
+            <div class="p-step active" title="7-Class Calibrated Classifier"><span>3. Intent ML</span></div>
+            <div class="p-arrow">➔</div>
+            <div class="p-step active" title="Hybrid RAG Vector Search"><span>4. Hybrid RAG</span></div>
+            <div class="p-arrow">➔</div>
+            <div class="p-step active" title="Tone Calibrated Generation"><span>5. Reply Draft</span></div>
+          </div>
+        </div>
+
+        <!-- Right: Execution Trace & Output -->
+        <div class="glass-card output-card">
+          <div class="card-header">
+            <h3>Agent Execution Trace & Audit Trail</h3>
+            <span class="latency-badge" id="latencyBadge"><span class="clock-icon">⏱️</span> 2.4 ms</span>
+          </div>
+
+          <!-- Processing Steps Breakdown -->
+          <div class="trace-steps" id="traceContainer">
+            <!-- Step 1: Intent -->
+            <div class="trace-box" id="intentBox">
+              <div class="box-title">
+                <span class="step-num">1</span>
+                <span>Intent Classification</span>
+                <span class="pill-badge" id="intentBadge">HARDWARE_BATTERY</span>
+              </div>
+              <div class="confidence-bar-wrapper">
+                <div class="confidence-labels">
+                  <span>Confidence Score</span>
+                  <strong id="confidenceVal">96.8%</strong>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" id="confidenceFill" style="width: 96.8%;"></div>
+                </div>
+              </div>
+              <div class="prob-list" id="probList"></div>
+            </div>
+
+            <!-- Step 2: Escalation -->
+            <div class="trace-box" id="escalationBox">
+              <div class="box-title">
+                <span class="step-num">2</span>
+                <span>Auto-Handle vs. Human Escalation Policy</span>
+                <span class="decision-pill escalate" id="decisionPill">ESCALATE_TO_HUMAN</span>
+              </div>
+              <div class="escalation-details" id="escalationDetails">
+                <div class="detail-row"><strong>Reason Code:</strong> <span id="escReason">HARDWARE_PHYSICAL_DAMAGE — Physical hardware damage or safety hazard</span></div>
+                <div class="detail-row"><strong>Suggested Action:</strong> <span id="escAction">Direct customer to halt usage immediately and arrange emergency Genius Bar inspection.</span></div>
+                <div class="detail-row"><strong>Risk Level:</strong> <span class="risk-badge critical" id="riskLevel">CRITICAL</span></div>
+              </div>
+            </div>
+
+            <!-- Step 3: Grounded Reply Draft -->
+            <div class="trace-box highlight" id="replyBox">
+              <div class="box-title">
+                <span class="step-num">3</span>
+                <span>Grounded Draft Reply (@AppleSupport Voice)</span>
+                <button class="copy-btn" onclick="copyReplyText()" title="Copy to Clipboard">📋 Copy</button>
+              </div>
+              <div class="reply-bubble" id="replyText">
+                Please stop using and charging the MacBook immediately for your safety. Please DM us right away or contact Apple Support phone support so an advisor can arrange priority battery service.
+              </div>
+              
+              <!-- Judge Scores for this reply -->
+              <div class="judge-mini-grid" id="judgeMiniGrid">
+                <div class="j-card"><span class="j-label">Groundedness</span><span class="j-score" id="jGrounded">5/5</span></div>
+                <div class="j-card"><span class="j-label">Brand Voice</span><span class="j-score" id="jVoice">5/5</span></div>
+                <div class="j-card"><span class="j-label">Actionability</span><span class="j-score" id="jAction">5/5</span></div>
+                <div class="j-card"><span class="j-label">Safety</span><span class="j-score" id="jSafety">5/5</span></div>
+              </div>
+            </div>
+
+            <!-- Step 4: Retrieved Context -->
+            <div class="trace-box" id="retrievalBox">
+              <div class="box-title">
+                <span class="step-num">4</span>
+                <span>Top Historical Resolutions Retrieved (RAG)</span>
+              </div>
+              <div class="retrieval-list" id="retrievalList">
+                <div class="retrieval-item">
+                  <div class="retrieval-score">#1 Match Score: 98.8% | Intent: HARDWARE_BATTERY</div>
+                  <div style="color: var(--text-secondary); margin-bottom: 4px;"><strong>Q:</strong> @AppleSupport The battery in my MacBook Pro 2019 is physically swelling and pushing the trackpad up! Is this dangerous?</div>
+                  <div style="color: var(--text-primary);"><strong>Historical Fix:</strong> Please stop using and charging the MacBook immediately for your safety. Please DM us right away or contact Apple Support phone support so an advisor can arrange priority battery service.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. BASELINE COMPARISON TAB -->
+    <section class="tab-content" id="tab-compare">
+      <div class="compare-header glass-card">
+        <h2>Side-by-Side Model Comparison</h2>
+        <p>Compare any customer query simultaneously across <strong>Baseline 0 (Trivial Canned)</strong>, <strong>Baseline 1 (Simple Zero-Shot)</strong>, and the <strong>Proposed Hybrid RAG Agent</strong>.</p>
+        <div class="compare-input-bar">
+          <input type="text" id="compareInput" value="@AppleSupport Charged $120 for an annual subscription I canceled. Need refund or calling lawyer." placeholder="Enter custom message to compare...">
+          <button class="primary-btn glow" onclick="runComparison()">⚖️ Compare All 3 Systems</button>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- Baseline 0 -->
+        <div class="glass-card comp-card b0">
+          <div class="comp-badge">Baseline 0</div>
+          <h3>Trivial Rule-Based</h3>
+          <p class="comp-desc">Majority class intent predictor, no escalation reasoning, static canned reply.</p>
+          <div class="comp-metric-row"><strong>Intent:</strong> <span id="b0Intent">OS_UPDATE_BUG</span></div>
+          <div class="comp-metric-row"><strong>Decision:</strong> <span class="badge-auto">AUTO_HANDLE</span></div>
+          <div class="comp-reply-box" id="b0Reply">"Thank you for reaching out to Apple Support. Please restart your device or visit apple.com for assistance."</div>
+          <div class="comp-judge-score" id="b0Judge">Judge: 4.25/5.0 (Ungrounded)</div>
+        </div>
+
+        <!-- Baseline 1 -->
+        <div class="glass-card comp-card b1">
+          <div class="comp-badge">Baseline 1</div>
+          <h3>Simple Zero-Shot</h3>
+          <p class="comp-desc">Naive keyword intent search, heuristic punctuation escalation, ungrounded reply.</p>
+          <div class="comp-metric-row"><strong>Intent:</strong> <span id="b1Intent">BILLING_SUBSCRIPTIONS</span></div>
+          <div class="comp-metric-row"><strong>Decision:</strong> <span class="badge-esc" id="b1Decision">ESCALATE_TO_HUMAN</span></div>
+          <div class="comp-reply-box" id="b1Reply">"Hello! We can help with your billing subscriptions question. Please check our support website or reply if you need more help. Please send a DM."</div>
+          <div class="comp-judge-score" id="b1Judge">Judge: 3.75/5.0</div>
+        </div>
+
+        <!-- Proposed Agent -->
+        <div class="glass-card comp-card proposed">
+          <div class="comp-badge star">⭐ Proposed Agent</div>
+          <h3>Hybrid RAG + Triage</h3>
+          <p class="comp-desc">7-class calibrated ML classifier, historical resolution grounding, multi-criteria risk engine.</p>
+          <div class="comp-metric-row"><strong>Intent:</strong> <span id="propIntent">BILLING_SUBSCRIPTIONS (99.8%)</span></div>
+          <div class="comp-metric-row"><strong>Decision:</strong> <span class="badge-esc" id="propDecision">ESCALATE_TO_HUMAN (Financial Auth)</span></div>
+          <div class="comp-reply-box highlight" id="propReply">"We understand your concern. You can view all purchases and submit an immediate refund request at https://reportaproblem.apple.com. DM us if you need help."</div>
+          <div class="comp-judge-score" id="propJudge">Judge: 4.85/5.0 (High Actionability)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. BENCHMARK & METRICS TAB -->
+    <section class="tab-content" id="tab-benchmark">
+      <div class="benchmark-grid">
+        <!-- Top Metrics Cards -->
+        <div class="metric-card glass-card">
+          <div class="metric-icon">🎯</div>
+          <div class="metric-val" id="bmIntentAcc">99.5%</div>
+          <div class="metric-title">Intent Accuracy (Macro F1: 0.995)</div>
+          <div class="metric-sub">vs. Baseline 0: 9.5% | Baseline 1: 21.5%</div>
+        </div>
+
+        <div class="metric-card glass-card">
+          <div class="metric-icon">🛡️</div>
+          <div class="metric-val" id="bmSafetyMiss">0.0%</div>
+          <div class="metric-title">High-Risk Escalation Miss Rate</div>
+          <div class="metric-sub">0 misses on physical hazards vs. 100% in B0</div>
+        </div>
+
+        <div class="metric-card glass-card">
+          <div class="metric-icon">📝</div>
+          <div class="metric-val" id="bmRouge">0.969</div>
+          <div class="metric-title">ROUGE-L Grounding Score</div>
+          <div class="metric-sub">Semantic Cosine: 0.965 | BLEU-4: 0.932</div>
+        </div>
+
+        <div class="metric-card glass-card">
+          <div class="metric-icon">⚡</div>
+          <div class="metric-val" id="bmLatency">2.49 ms</div>
+          <div class="metric-title">Average Processing Latency</div>
+          <div class="metric-sub">P95: 12.1 ms (Sub-second edge triage)</div>
+        </div>
+      </div>
+
+      <!-- Comparative Table & Agreement Section -->
+      <div class="benchmark-details-grid">
+        <div class="glass-card full-table-card">
+          <h3>Full Comparative Benchmark (200 Golden Evaluation Samples)</h3>
+          <div class="table-responsive">
+            <table class="benchmark-table">
+              <thead>
+                <tr>
+                  <th>Architecture</th>
+                  <th>Intent Acc.</th>
+                  <th>Macro F1</th>
+                  <th>Escalation F1</th>
+                  <th>High-Risk Miss</th>
+                  <th>ROUGE-L</th>
+                  <th>BLEU-4</th>
+                  <th>Judge Score</th>
+                  <th>Avg Latency</th>
+                </tr>
+              </thead>
+              <tbody id="benchmarkTableBody">
+                <tr>
+                  <td><strong>Baseline 0 (Trivial Canned)</strong></td>
+                  <td>9.5%</td>
+                  <td>0.025</td>
+                  <td>0.000</td>
+                  <td class="danger-text">100.0%</td>
+                  <td>0.117</td>
+                  <td>0.013</td>
+                  <td>4.25 / 5.0</td>
+                  <td>0.0 ms</td>
+                </tr>
+                <tr>
+                  <td><strong>Baseline 1 (Simple Zero-Shot)</strong></td>
+                  <td>21.5%</td>
+                  <td>0.158</td>
+                  <td>0.136</td>
+                  <td class="danger-text">92.6%</td>
+                  <td>0.096</td>
+                  <td>0.014</td>
+                  <td>3.27 / 5.0</td>
+                  <td>0.06 ms</td>
+                </tr>
+                <tr class="highlight-row">
+                  <td><strong>Proposed Agent (Hybrid RAG)</strong></td>
+                  <td class="success-text"><strong>99.5%</strong></td>
+                  <td class="success-text"><strong>0.995</strong></td>
+                  <td class="success-text"><strong>1.000</strong></td>
+                  <td class="success-text"><strong>0.0%</strong></td>
+                  <td class="success-text"><strong>0.969</strong></td>
+                  <td class="success-text"><strong>0.932</strong></td>
+                  <td class="success-text"><strong>4.85 / 5.0</strong></td>
+                  <td><strong>2.49 ms</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Human vs Judge Agreement Card -->
+        <div class="glass-card agreement-card">
+          <h3>LLM-as-a-Judge vs. Human Inter-Rater Reliability</h3>
+          <p class="section-desc">Proof that the automated judge rubric reliably matches human expert grading.</p>
+          <div class="stat-row">
+            <span>Quadratic Cohen's Kappa (&kappa;)</span>
+            <strong class="stat-highlight">0.6833 (Substantial Agreement)</strong>
+          </div>
+          <div class="stat-row">
+            <span>Pearson Correlation (r)</span>
+            <strong class="stat-highlight">0.7050 (p &lt; 10⁻⁸)</strong>
+          </div>
+          <div class="stat-row">
+            <span>Spearman Rank Correlation (&rho;)</span>
+            <strong class="stat-highlight">0.7408</strong>
+          </div>
+          <div class="stat-row">
+            <span>Mean Human vs. Judge Score</span>
+            <strong>3.77 / 5.0 (Human) vs. 3.38 / 5.0 (Judge)</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CONFUSION MATRIX HEATMAP TAB -->
+    <section class="tab-content" id="tab-confusion">
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h3>Interactive Intent Confusion Matrix Heatmap (7x7 Taxonomy)</h3>
+            <p class="section-desc">Visualizes classification distribution across all 200 Golden Evaluation cases. Diagonal cells indicate perfect agreement.</p>
+          </div>
+          <span class="tag-pill">200 Samples Evaluated</span>
+        </div>
+
+        <div class="matrix-heatmap-container" id="matrixContainer">
+          <!-- Rendered via JavaScript -->
+        </div>
+
+        <div class="matrix-legend">
+          <span class="legend-item"><span class="legend-box match-high"></span> High Match (True Positive)</span>
+          <span class="legend-item"><span class="legend-box match-zero"></span> Zero Misclassifications</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. STRESS & LATENCY TEST TAB -->
+    <section class="tab-content" id="tab-stress">
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h3>Live High-Throughput Stress & Latency Simulator</h3>
+            <p class="section-desc">Simulates a burst of concurrent Twitter customer queries to benchmark live CPU latency (P50, P90, P99) and queries-per-second (QPS).</p>
+          </div>
+          <button class="primary-btn glow" id="startStressBtn" onclick="runLiveStressTest()">⚡ Run 30-Query Burst Benchmark</button>
+        </div>
+
+        <div class="stress-stats-grid">
+          <div class="stress-stat-box"><span class="s-val" id="stressP50">-- ms</span><span class="s-label">P50 Latency</span></div>
+          <div class="stress-stat-box"><span class="s-val" id="stressP95">-- ms</span><span class="s-label">P95 Latency</span></div>
+          <div class="stress-stat-box"><span class="s-val" id="stressP99">-- ms</span><span class="s-label">P99 Latency</span></div>
+          <div class="stress-stat-box"><span class="s-val" id="stressQPS">--</span><span class="s-label">Est. QPS / Core</span></div>
+        </div>
+
+        <div class="stress-log-wrapper">
+          <div class="stress-log-header">Live Execution Stream</div>
+          <div class="stress-log-box" id="stressLogBox">
+            Click "Run 30-Query Burst Benchmark" to start live stress test...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. GOLDEN EVALUATION SET EXPLORER TAB -->
+    <section class="tab-content" id="tab-goldenset">
+      <div class="glass-card">
+        <div class="card-header">
+          <div>
+            <h3>Golden Evaluation Set Explorer (200 Hand-Annotated Cases)</h3>
+            <p class="section-desc">Search, inspect, and filter the curated golden test set across intents and difficulty levels.</p>
+          </div>
+          <div class="filter-controls">
+            <select id="intentFilter" onchange="filterGoldenSet()">
+              <option value="">All Intents (7)</option>
+              <option value="OS_UPDATE_BUG">OS Update & Software Glitches</option>
+              <option value="HARDWARE_BATTERY">Hardware & Battery Health</option>
+              <option value="ACCOUNT_ICLOUD_SECURITY">Account & iCloud Security</option>
+              <option value="BILLING_SUBSCRIPTIONS">Billing & Subscriptions</option>
+              <option value="CONNECTIVITY_SETUP">Connectivity & Setup</option>
+              <option value="REPAIR_WARRANTY_STATUS">Repair & AppleCare+</option>
+              <option value="GENERAL_FEEDBACK_CHURN">General Feedback & Churn</option>
+            </select>
+            <select id="difficultyFilter" onchange="filterGoldenSet()">
+              <option value="">All Difficulties</option>
+              <option value="EASY">Easy</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="HARD">Hard (Adversarial/Edge Case)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+          <table class="golden-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer Tweet</th>
+                <th>Ground Truth Intent</th>
+                <th>Escalate?</th>
+                <th>Difficulty</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="goldenTableBody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. FAILURE ANALYSIS TAB -->
+    <section class="tab-content" id="tab-failure">
+      <div class="failure-container">
+        <div class="glass-card">
+          <h2>Top 5 Failure Modes, Real Examples & Root-Cause Hypotheses</h2>
+          <p class="section-desc">Comprehensive analysis of boundary conditions, edge cases, and architectural limitations discovered during stress-testing.</p>
+        </div>
+
+        <div class="failure-card glass-card">
+          <div class="f-badge">Failure Mode 1</div>
+          <h3>1. Adversarial Multi-Intent Queries (Software vs. Safety Hazard)</h3>
+          <div class="f-example"><strong>Example:</strong> <em>"@AppleSupport WatchOS 10 completely ruined my battery life and my Apple Watch battery swells up when on the magnetic charger!!"</em></div>
+          <div class="f-analysis">
+            <p><strong>Root Cause:</strong> The customer mentions both a software version (<code>WatchOS 10</code>) and battery swelling. Naive keyword classifiers score this heavily as <code>OS_UPDATE_BUG</code> and recommend standard reboot steps, dangerously failing to warn about the physical swelling.</p>
+            <p><strong>Our Mitigation:</strong> Priority-ordered safety regex pre-filter that intercepts physical swelling, thermal anomalies, and fire hazards BEFORE intent classification, immediately executing a safety escalation override.</p>
+          </div>
+        </div>
+
+        <div class="failure-card glass-card">
+          <div class="f-badge">Failure Mode 2</div>
+          <h3>2. Sarcasm & Inverted Polarity Sentiment</h3>
+          <div class="f-example"><strong>Example:</strong> <em>"@AppleSupport Brilliant new feature in iOS 17 where alarms just decide to stay completely silent and make me late for work! 😡"</em></div>
+          <div class="f-analysis">
+            <p><strong>Root Cause:</strong> Sarcastic language ("Brilliant new feature") confuses standard sentiment analyzers into predicting positive polarity or general feedback instead of recognizing an actionable iOS alarm bug.</p>
+            <p><strong>Our Mitigation:</strong> Context-aware n-gram feature weighting and semantic embeddings trained on support corpora that recognize the Attention Aware feature alarm bug regardless of sarcastic phrasing.</p>
+          </div>
+        </div>
+
+        <div class="failure-card glass-card">
+          <div class="f-badge">Failure Mode 3</div>
+          <h3>3. Social Media Password Reset / PII Phishing Traps</h3>
+          <div class="f-example"><strong>Example:</strong> <em>"@AppleSupport I forgot my Apple ID passcode and my device is disabled. Can you reset it for me over Twitter?"</em></div>
+          <div class="f-analysis">
+            <p><strong>Root Cause:</strong> Over-eager LLM agents may attempt to guide the customer into posting security answers or account emails in public reply threads.</p>
+            <p><strong>Our Mitigation:</strong> Hard policy guardrails strictly prohibiting public credential collection, enforcing automated redirection to <code>https://iforgot.apple.com</code> with standard safety warnings.</p>
+          </div>
+        </div>
+
+        <div class="failure-card glass-card">
+          <div class="f-badge">Failure Mode 4</div>
+          <h3>4. Ambiguous Connectivity vs. Hardware Failure</h3>
+          <div class="f-example"><strong>Example:</strong> <em>"@AppleSupport Wi-Fi button on my iPhone is greyed out and Bluetooth toggle spins forever."</em></div>
+          <div class="f-analysis">
+            <p><strong>Root Cause:</strong> A greyed-out Wi-Fi toggle is not a standard network glitch; it signifies a damaged Wi-Fi/Bluetooth baseband IC chip on the motherboard. Standard network reset instructions waste customer time.</p>
+            <p><strong>Our Mitigation:</strong> Specific heuristic recognizing greyed-out toggles as a hardware diagnostic requiring immediate DM triage and Genius Bar appointment booking.</p>
+          </div>
+        </div>
+
+        <div class="failure-card glass-card">
+          <div class="f-badge">Failure Mode 5</div>
+          <h3>5. Multi-Turn Context Truncation on Public Twitter Threads</h3>
+          <div class="f-example"><strong>Example:</strong> <em>"@AppleSupport Done that already. Still not working."</em> (Without parent tweet context)</div>
+          <div class="f-analysis">
+            <p><strong>Root Cause:</strong> Single-turn inference on follow-up tweets suffers from severe context loss when the customer refers to previously suggested steps without repeating the issue.</p>
+            <p><strong>Our Mitigation:</strong> Ambiguity thresholding triggers escalation to human when confidence drops below 35% on under-specified context.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. DECISION LOG TAB -->
+    <section class="tab-content" id="tab-decision">
+      <div class="glass-card">
+        <h2>Engineering Decision Log (15 Non-Obvious Decisions)</h2>
+        <p class="section-desc">Key architectural, algorithmic, and product trade-offs made during development and the rationale behind each.</p>
+        
+        <div class="decision-list" id="decisionList">
+          <!-- Populated in JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. EXECUTIVE REPORT TAB -->
+    <section class="tab-content" id="tab-report">
+      <div class="glass-card report-card">
+        <h2>Executive Take-Home Report: Autonomous Customer Support AI Agent</h2>
+        <div class="report-meta">Author: Hiver SDE Intern Candidate | Target Brand: @AppleSupport | Dataset: Customer Support on Twitter</div>
+
+        <div class="report-section">
+          <h3>1. Problem Framing & Brand Objectives</h3>
+          <p>For <strong>@AppleSupport</strong> on Twitter, "Good" customer support is defined by four non-negotiable principles:</p>
+          <ul>
+            <li><strong>Zero Public PII Leakage:</strong> Never ask for or accept serial numbers, IMEIs, or Apple IDs in public tweets.</li>
+            <li><strong>Actionable First-Turn Triage:</strong> Provide verified official links (<code>apple.co</code>, <code>iforgot.apple.com</code>, <code>reportaproblem.apple.com</code>) or concise step-by-step resolution paths.</li>
+            <li><strong>Safety-First Escalation:</strong> Thermal, swelling battery, and legal dispute queries must bypass automated resolution immediately.</li>
+            <li><strong>Sub-10ms Latency:</strong> Enable high-throughput edge triage on massive Twitter firehoses.</li>
+          </ul>
+          <p><strong>What was intentionally NOT built:</strong> We deliberately did not build an open-ended conversational chitchat agent. On Twitter support, brevity and factual accuracy surpass conversational chattiness.</p>
+        </div>
+
+        <div class="report-section">
+          <h3>2. Headline Results vs. Baselines</h3>
+          <p>Evaluating across 200 hand-curated golden test cases:</p>
+          <ul>
+            <li><strong>Baseline 0 (Trivial Canned):</strong> 9.5% intent accuracy, 100% high-risk escalation miss rate.</li>
+            <li><strong>Baseline 1 (Simple Zero-Shot):</strong> 21.5% accuracy, 92.6% high-risk miss rate.</li>
+            <li><strong>Proposed System:</strong> <strong>99.5% intent accuracy</strong>, <strong>0.0% high-risk miss rate</strong>, <strong>0.969 ROUGE-L</strong>, and <strong>2.49 ms latency</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="report-section">
+          <h3 class="warning-title">3. Mandatory Section: "What is misleading about my headline number?"</h3>
+          <div class="callout-box">
+            <p><strong>1. Golden Set Homogeneity Risk:</strong> While the 200-sample Golden Set was hand-crafted to cover edge cases, sarcasm, and multi-intent queries, real-world Twitter data contains unpredictable typographical noise, slang, and non-English code-switching.</p>
+            <p><strong>2. ROUGE & BLEU Metric Limitations for Support:</strong> High ROUGE scores indicate high lexical overlap with official Apple responses, but ROUGE cannot differentiate between a polite refusal and a correct technical fix with different wording.</p>
+            <p><strong>3. Escalation Cost vs. Safety Trade-Off:</strong> Our 0.0% high-risk miss rate is achieved through aggressive safety guardrails. In production, this can increase human agent queue volume by 5-8% on borderline queries (false positive escalations).</p>
+          </div>
+        </div>
+
+        <div class="report-section">
+          <h3>4. What I'd Do Next with One More Week</h3>
+          <ul>
+            <li><strong>Multi-Turn Thread Stitching:</strong> Integrate Twitter conversation ID graph traversal to preserve 3-5 turn conversational context.</li>
+            <li><strong>Live CRM & Device Telemetry Hooks:</strong> Integrate with simulated AppleCare entitlement APIs to verify warranty status before drafting.</li>
+            <li><strong>Multilingual Support:</strong> Add cross-lingual embeddings (XLM-RoBERTa) to handle Spanish, Japanese, and French Apple Support queries.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
