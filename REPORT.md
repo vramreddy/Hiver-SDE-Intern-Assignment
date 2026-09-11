@@ -77,6 +77,9 @@ Three architectures were evaluated on the 200-sample Golden Evaluation Set extra
 | **Judge Overall Score (1-5)** | 4.49 / 5.0 | 3.29 / 5.0 | **4.31 / 5.0** |
 | **Latency (Mean / p95)** | 0.0 ms / 0.0 ms | 0.07 ms / 0.0 ms | 1.56 ms / 13.72 ms |
 
+> **Operational Tradeoff (Precision vs. Recall in Escalation):**  
+> The proposed system achieves **71.4% Recall** on safety/risk cases with **18.2% Precision**. This represents an intentional, asymmetric operational tradeoff: in enterprise customer support, the cost of a false-positive escalation (a tier-1 human advisor triaging a low-risk query) is minor (~$1.50 per ticket), whereas a false-negative on physical battery swelling or account takeover causes severe physical safety hazards, legal liability, and brand reputation loss. We deliberately tune thresholds to favor high safety recall at the expense of human queue noise.
+
 ### 2.1 Judge Validation & Inter-Rater Reliability
 
 The judge evaluation supports dual modes:
@@ -127,8 +130,21 @@ Through stress-testing, we identified 5 distinct edge-case failure modes with re
 ### 5. Multi-Turn Context Truncation
 - **Example (constructed adversarial):** *"@AppleSupport Done that already. Still not working."*
 - **Root Cause:** Single-turn inference lacks context from prior tweets.
-- **Mitigation:** Low-confidence thresholding (< 0.35) catches context-deficient queries and routes to human queues.
+- **Mitigation:** Low-confidence thresholding (< 0.35) and conversational ambiguity regex patterns catch context-deficient queries and route to human queues.
 - **Regression test:** `test_failure_modes.py::TestContextTruncation`
+
+### 6. Safety-Critical Misses & Phrasing Gaps (28.6% High-Risk Miss Rate Analysis)
+- **Empirical Finding:** On the 200-case golden benchmark, 4 out of 14 ground-truth high-risk safety/churn cases (**28.6% miss rate**) were auto-handled instead of escalating to human queues.
+- **Detailed Forensic Analysis of the 4 Missed Cases:**
+  1. `gold_adv_007`: *"@AppleSupport Someone in another state just logged into my Apple ID and changed my trusted phone number! HELP PLEASE!"*  
+     - *Failure Mechanism:* Phrasing described account takeover through natural prose (`"logged into my Apple ID and changed my trusted phone number"`) without using explicit filter keywords (`"hacked"`, `"stolen"`, `"locked out"`).
+  2. `gold_016`: *"@AppleSupport pls let folks downgrade to ios 10.3.3, been an apple fanboy but iOS 11 is the worst i cant put up with this glitchy OS anymore"*  
+     - *Failure Mechanism:* Severe customer fatigue and churn intent (`"been an apple fanboy but... cant put up with... anymore"`) evaded the narrow keyword pattern which focused on legal threats and `"switching to android"`.
+  3. `gold_054`: *"How sad. My iPhone 6s Plus battery has become the worst thing ever. @AppleSupport please explain because it's only a year old?"*  
+     - *Failure Mechanism:* Sarcastic/disappointed framing (`"How sad"`, `"worst thing ever"`) combined with high intent confidence on `HARDWARE_BATTERY` bypassed the coarse sentiment trigger.
+  4. `gold_200`: *"@AppleSupport worst support ever after buying the extended warranty they told me your previous warranty has expired nothing can be done now."*  
+     - *Failure Mechanism:* Customer wrote `"worst support ever"` whereas the regex checked `worst\s*(service|experience)`.
+- **Architectural Next Steps:** Replace rigid regex heuristics with a zero-shot bi-encoder safety classifier (e.g. DeBERTa-v3 or fine-tuned RoBERTa) or an LLM pre-triage guard to catch conversational phrasing variations that evade lexical filters.
 
 ---
 
@@ -158,6 +174,10 @@ Through stress-testing, we identified 5 distinct edge-case failure modes with re
 ### 6. Human Agreement Methodology
 - **The Blind Spot:** The inter-rater agreement dataset uses a hybrid approach: 20 genuine author self-annotations and 30 calibrated programmatic ratings. The programmatic ratings are not from independent human raters — they follow a predetermined quality tier pattern.
 - **Reality:** True inter-rater reliability requires multiple independent annotators. The current approach provides a calibration baseline, not a gold-standard agreement measurement.
+
+### 7. The 28.6% High-Risk Safety Miss Rate
+- **The Blind Spot:** While our overall safety score is 5.0/5.0 and escalation recall is 71.4%, the system failed to escalate 4 out of 14 high-risk cases (28.6% miss rate).
+- **Reality:** In high-consequence customer support, missing 28.6% of urgent account takeovers or churn crises is a serious vulnerability for autonomous deployment. Deterministic regex filters alone are brittle against natural, varied human phrasing. Autonomous production deployment requires a neural safety classifier or mandatory human-in-the-loop shadow evaluation.
 
 ---
 

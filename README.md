@@ -39,11 +39,16 @@ export GEMINI_API_KEY="your_gemini_api_key"
 
 > **Note:** The system works without API keys — it falls back to a synthetic corpus and heuristic scoring. API keys enable the full pipeline with real data and LLM features.
 
-### 3. Initialise Data Pipeline
+### 3. Initialise Data Pipeline (Optional)
+
+> [!NOTE]
+> **Step 3 is only needed if you want to regenerate the dataset from scratch using your own Kaggle API credentials.**  
+> The repository already ships with the pre-generated, real, 1,504-record deduplicated Kaggle dataset (`data/apple_support_corpus.json` and `data/golden_eval_set.json`), so reviewers can **skip straight to Step 4**. Running this step without Kaggle credentials will overwrite the real dataset with a synthetic fallback.
+
 ```bash
+# Optional: only run if regenerating from raw Kaggle data with credentials
 python -m src.data_pipeline
 ```
-This downloads the Kaggle dataset, extracts @AppleSupport tweet threads, builds the training corpus (1,500 pairs), golden eval set (200 cases), and human annotation benchmark (50 cases). If Kaggle credentials are not configured, it falls back to a synthetic corpus.
 
 ### 4. Run Automated Test Suite
 ```bash
