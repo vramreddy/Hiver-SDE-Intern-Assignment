@@ -1,34 +1,146 @@
 """
 Unified Customer Support Agent Pipeline for @AppleSupport.
-Integrates Intent Classification, RAG Historical Grounding, Escalation Policy,
-and Tone-Calibrated Draft Generation.
+
+Integrates Intent Classification, Historical Retrieval Grounding,
+Escalation Policy, and Draft Reply Generation.
+
+Reply generation:
+  - When GEMINI_API_KEY is set: Uses Gemini LLM grounded in retrieved cases
+  - When not set: Uses template-based retrieval fallback (clearly labeled)
 """
 
 import os
 import time
 import re
+import logging
 from typing import Dict, Any, List, Optional
+
 from .intent_classifier import IntentClassifier
 from .retrieval_engine import RetrievalEngine
 from .escalation_policy import EscalationPolicy
 from .config import BRAND_HANDLE, BRAND_NAME, INTENT_TAXONOMY
+from . import llm_client
+
+logger = logging.getLogger(__name__)
+
+# System instruction for Gemini reply generation
+_REPLY_SYSTEM_PROMPT = """\
+You are @AppleSupport on Twitter. Draft a concise, empathetic customer support reply.
+
+Rules:
+- Maximum 280 characters (Twitter limit)
+- Never ask for PII (passwords, serial numbers, Apple ID emails) in public tweets
+- If escalation is needed, direct the customer to send a DM
+- Only use verified Apple URLs: apple.co/*, support.apple.com, locate.apple.com, \
+iforgot.apple.com, appleid.apple.com, reportaproblem.apple.com, checkcoverage.apple.com
+- Match @AppleSupport's warm, professional, empathetic tone
+- Provide specific, actionable steps when possible
+- For safety hazards (swollen battery, fire, smoke): immediately warn to stop using the device
+
+Respond with ONLY the reply text. No quotes, no metadata.
+"""
+
 
 class AppleSupportAgent:
     def __init__(self, corpus_path: Optional[str] = None):
         self.intent_classifier = IntentClassifier(corpus_path)
         self.retrieval_engine = RetrievalEngine(corpus_path)
         self.escalation_policy = EscalationPolicy()
+        self._llm_available = llm_client.is_available()
 
-    def generate_draft_reply(self, query: str, intent: str, escalation: Dict[str, Any], retrieved_cases: List[Dict[str, Any]]) -> str:
+        if self._llm_available:
+            logger.info("Agent: Gemini LLM available for reply generation.")
+        else:
+            logger.info("Agent: No GEMINI_API_KEY — using template-based retrieval fallback.")
+
+    def generate_draft_reply(
+        self,
+        query: str,
+        intent: str,
+        escalation: Dict[str, Any],
+        retrieved_cases: List[Dict[str, Any]],
+    ) -> str:
         """
-        Drafts a response grounded in historical resolutions and calibrated to Apple Support brand voice.
+        Drafts a response to a customer query.
+
+        When Gemini is available: generates a grounded LLM reply.
+        When not: uses retrieval + template fallback.
         """
-        # If we have a very high quality top retrieved case (similarity > 0.65), adapt from historical resolution
+        if self._llm_available:
+            llm_reply = self._llm_generate_reply(query, intent, escalation, retrieved_cases)
+            if llm_reply:
+                return llm_reply
+            logger.warning("Gemini generation failed — falling back to templates.")
+
+        return self._template_generate_reply(query, intent, escalation, retrieved_cases)
+
+    # ------------------------------------------------------------------ #
+    #  Gemini LLM Reply Generation
+    # ------------------------------------------------------------------ #
+
+    def _llm_generate_reply(
+        self,
+        query: str,
+        intent: str,
+        escalation: Dict[str, Any],
+        retrieved_cases: List[Dict[str, Any]],
+    ) -> Optional[str]:
+        """Generates a reply using Gemini, grounded in retrieved historical cases."""
+        # Build context from retrieved cases
+        context_lines = []
+        for i, case in enumerate(retrieved_cases[:3]):
+            context_lines.append(
+                f"Historical case {i+1}:\n"
+                f"  Customer: {case['customer_text'][:200]}\n"
+                f"  Agent reply: {case['agent_text'][:200]}"
+            )
+        context = "\n".join(context_lines) if context_lines else "No historical cases retrieved."
+
+        esc_desc = escalation.get("reason_description", "Standard troubleshooting")
+        esc_decision = escalation.get("decision", "AUTO_HANDLE")
+
+        prompt = (
+            f"Customer tweet: {query}\n"
+            f"Classified intent: {intent}\n"
+            f"Escalation decision: {esc_decision}\n"
+            f"Escalation reason: {esc_desc}\n\n"
+            f"Historical resolutions for grounding:\n{context}\n\n"
+            f"Draft the @AppleSupport reply."
+        )
+
+        reply = llm_client.generate(
+            prompt,
+            system_instruction=_REPLY_SYSTEM_PROMPT,
+            temperature=0.4,
+            max_output_tokens=256,
+        )
+
+        if reply and len(reply) > 10:
+            # Strip any accidental quotes
+            reply = reply.strip('"').strip("'").strip()
+            return reply
+        return None
+
+    # ------------------------------------------------------------------ #
+    #  Template-Based Retrieval Fallback
+    # ------------------------------------------------------------------ #
+
+    def _template_generate_reply(
+        self,
+        query: str,
+        intent: str,
+        escalation: Dict[str, Any],
+        retrieved_cases: List[Dict[str, Any]],
+    ) -> str:
+        """
+        Template-based reply generation grounded in historical resolutions.
+        Used when GEMINI_API_KEY is not set.
+        """
+        # If we have a high quality retrieved case, adapt from historical resolution
         if retrieved_cases and retrieved_cases[0]["similarity_score"] > 0.40:
             best_match = retrieved_cases[0]
             base_reply = best_match["agent_text"]
-            
-            # If escalated to human for PII or high sentiment, ensure standard DM greeting is present
+
             if escalation["decision"] == "ESCALATE_TO_HUMAN":
                 if "dm" not in base_reply.lower() and "message" not in base_reply.lower():
                     base_reply += " Please send us a DM so an advisor can securely review your account details."
@@ -38,36 +150,52 @@ class AppleSupportAgent:
         if escalation["decision"] == "ESCALATE_TO_HUMAN":
             reason = escalation["escalation_reason"]
             if reason == "HARDWARE_PHYSICAL_DAMAGE":
-                return "Your safety and device care are our priority. Please disconnect the charger and stop using the device. Send us a DM or visit https://locate.apple.com to book an immediate service appointment."
+                return ("Your safety and device care are our priority. Please disconnect the charger "
+                        "and stop using the device. Send us a DM or visit https://locate.apple.com "
+                        "to book an immediate service appointment.")
             elif reason == "HIGH_SENTIMENT_CHURN_RISK":
-                return "We sincerely apologize for the frustrating experience. We want to make this right. Please send us a DM with your case details and phone number so a senior specialist can assist you directly."
+                return ("We sincerely apologize for the frustrating experience. We want to make this right. "
+                        "Please send us a DM with your case details and phone number so a senior specialist "
+                        "can assist you directly.")
             elif reason == "BILLING_REFUND_AUTH":
-                return "We want to help resolve this billing concern quickly. Please submit a refund request at https://reportaproblem.apple.com or send us a DM with your Apple ID email for review."
+                return ("We want to help resolve this billing concern quickly. Please submit a refund request "
+                        "at https://reportaproblem.apple.com or send us a DM with your Apple ID email for review.")
             else:
-                return "We'd like to look into this with you. Please send us a DM with your device model and iOS version: https://apple.co/dm."
+                return ("We'd like to look into this with you. Please send us a DM with your device model "
+                        "and iOS version: https://apple.co/dm.")
         else:
-            # Auto-handle standard troubleshooting templates
-            if intent == "OS_UPDATE_BUG":
-                return "We'd like to help get this resolved. Have you tried a force restart on your device? Follow these steps: https://apple.co/force-restart. Let us know if the issue persists!"
-            elif intent == "HARDWARE_BATTERY":
-                return "We can help you review your hardware and battery health. You can check warranty status and find authorized service providers near you at https://locate.apple.com."
-            elif intent == "ACCOUNT_ICLOUD_SECURITY":
-                return "Account security is our priority. You can manage your Apple ID and verify security settings securely at https://appleid.apple.com."
-            elif intent == "BILLING_SUBSCRIPTIONS":
-                return "You can view your active subscriptions, recent purchases, and submit refund requests directly at https://reportaproblem.apple.com."
-            elif intent == "CONNECTIVITY_SETUP":
-                return "Let's troubleshoot your connection. Try toggling Airplane Mode, restarting your device, and checking for carrier settings updates in Settings > General > About."
-            elif intent == "REPAIR_WARRANTY_STATUS":
-                return "You can easily check your warranty coverage, AppleCare+ status, and schedule Genius Bar appointments at https://checkcoverage.apple.com."
-            else:
-                return "Thank you for reaching out to Apple Support! You can submit direct product feedback to our engineering teams anytime at https://apple.com/feedback."
+            templates = {
+                "OS_UPDATE_BUG": ("We'd like to help get this resolved. Have you tried a force restart on your "
+                                  "device? Follow these steps: https://apple.co/force-restart. Let us know if "
+                                  "the issue persists!"),
+                "HARDWARE_BATTERY": ("We can help you review your hardware and battery health. You can check "
+                                     "warranty status and find authorized service providers near you at "
+                                     "https://locate.apple.com."),
+                "ACCOUNT_ICLOUD_SECURITY": ("Account security is our priority. You can manage your Apple ID "
+                                            "and verify security settings securely at https://appleid.apple.com."),
+                "BILLING_SUBSCRIPTIONS": ("You can view your active subscriptions, recent purchases, and submit "
+                                          "refund requests directly at https://reportaproblem.apple.com."),
+                "CONNECTIVITY_SETUP": ("Let's troubleshoot your connection. Try toggling Airplane Mode, "
+                                       "restarting your device, and checking for carrier settings updates in "
+                                       "Settings > General > About."),
+                "REPAIR_WARRANTY_STATUS": ("You can easily check your warranty coverage, AppleCare+ status, "
+                                           "and schedule Genius Bar appointments at "
+                                           "https://checkcoverage.apple.com."),
+            }
+            return templates.get(
+                intent,
+                ("Thank you for reaching out to Apple Support! You can submit direct product feedback "
+                 "to our engineering teams anytime at https://apple.com/feedback.")
+            )
+
+    # ------------------------------------------------------------------ #
+    #  Full Pipeline Execution
+    # ------------------------------------------------------------------ #
 
     def process_query(self, query: str) -> Dict[str, Any]:
-        """
-        Executes the full AI support agent pipeline for an incoming customer tweet.
-        """
+        """Executes the full AI support agent pipeline for an incoming customer tweet."""
         start_time = time.time()
-        
+
         # 1. Intent Classification
         intent_res = self.intent_classifier.classify(query)
         predicted_intent = intent_res["predicted_intent"]
@@ -81,15 +209,15 @@ class AppleSupportAgent:
             text=query,
             intent=predicted_intent,
             confidence=confidence,
-            top_retrieved=retrieved
+            top_retrieved=retrieved,
         )
 
-        # 4. Tone-Calibrated Draft Reply Generation
+        # 4. Draft Reply Generation (LLM or template fallback)
         draft_reply = self.generate_draft_reply(
             query=query,
             intent=predicted_intent,
             escalation=escalation_res,
-            retrieved_cases=retrieved
+            retrieved_cases=retrieved,
         )
 
         elapsed_ms = round((time.time() - start_time) * 1000, 2)
@@ -101,23 +229,24 @@ class AppleSupportAgent:
                 "intent_name": intent_res["intent_name"],
                 "confidence": confidence,
                 "probabilities": intent_res["probabilities"],
-                "ranked_intents": intent_res["ranked_intents"]
+                "ranked_intents": intent_res["ranked_intents"],
             },
             "retrieval": {
                 "num_retrieved": len(retrieved),
-                "top_cases": retrieved
+                "top_cases": retrieved,
             },
             "escalation": {
                 "decision": escalation_res["decision"],
                 "reason_code": escalation_res["escalation_reason"],
                 "reason_description": escalation_res["reason_description"],
                 "suggested_action": escalation_res["suggested_action"],
-                "risk_level": escalation_res["risk_level"]
+                "risk_level": escalation_res["risk_level"],
             },
             "draft_reply": draft_reply,
             "meta": {
                 "brand": BRAND_HANDLE,
                 "processing_time_ms": elapsed_ms,
-                "pipeline_version": "1.0.0-prod"
-            }
+                "pipeline_version": "2.0.0",
+                "reply_mode": "gemini_llm" if self._llm_available else "template_fallback",
+            },
         }

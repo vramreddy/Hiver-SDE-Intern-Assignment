@@ -1,4 +1,4 @@
-# Technical & Evaluation Report: Autonomous Support AI Agent for @AppleSupport
+# Technical & Evaluation Report: Customer Support AI Agent for @AppleSupport
 
 **Author:** Hiver SDE Intern Candidate  
 **Target Brand:** @AppleSupport (Twitter Customer Support Dataset)  
@@ -7,127 +7,146 @@
 ---
 
 ## Executive Summary
-Deploying autonomous AI agents on public social customer support channels requires more than plausible text generation; it demands **verifiable reliability, strict safety boundaries, zero PII leakage, and low latency**. 
 
-This report presents the architecture and empirical evaluation of an autonomous Customer Support AI Agent built for **@AppleSupport** using historical Twitter customer support interactions. Evaluated against a 200-sample hand-annotated **Golden Evaluation Set**, our proposed **Hybrid RAG + Calibrated Triage Agent** achieves **99.5% intent classification accuracy (Macro F1: 0.995)**, **1.000 Escalation F1 with 0.0% safety-critical miss rate**, and **0.969 ROUGE-L semantic alignment** with an average latency of **2.5 ms/query**, vastly outperforming both a trivial canned baseline and a zero-shot LLM baseline.
+This report presents the architecture and empirical evaluation of a Customer Support AI Agent built for **@AppleSupport** using the [Kaggle Customer Support on Twitter](https://www.kaggle.com/datasets/thoughtvector/customer-support-on-twitter) dataset. The system reconstructs multi-turn tweet threads, extracts Apple Support conversations, trains a hybrid TF-IDF + Logistic Regression intent classifier, and evaluates responses using a Gemini LLM-as-a-Judge rubric.
+
+Evaluated against a 200-sample **Golden Evaluation Set** (deduplicated against the training corpus with verified 0% leakage), the system is benchmarked against a trivial canned baseline and a simple keyword baseline.
+
+> **Note on LLM integration:** Reply generation and judge scoring use the **Gemini 2.0 Flash API** when `GEMINI_API_KEY` is set. Without it, the system falls back to template-based retrieval (for replies) and a heuristic keyword scorer (for judge), both clearly labeled in output metadata.
 
 ---
 
 ## 1. Problem Framing & Operational Scope
 
 ### 1.1 What "Good" Means for @AppleSupport
-On public Twitter customer support channels, "good" support differs sharply from generic chat interfaces:
-1. **Absolute Public Privacy & Zero PII Leakage:** Under no circumstances may an agent request or expose sensitive account credentials, Apple ID emails, serial numbers, or IMEI codes in public tweets.
-2. **Actionable First-Turn Triage:** Replies must provide official, verified Apple troubleshooting subdomains (`apple.co`, `locate.apple.com`, `iforgot.apple.com`, `reportaproblem.apple.com`) or concise self-serve steps.
-3. **Safety-Critical Hardware Interception:** Catastrophic hardware hazards (e.g., lithium battery swelling, thermal anomalies, smoking chargers) must bypass automated resolution immediately with urgent safety advisories.
-4. **Sub-10ms High-Throughput Triage:** Twitter support queues experience high-volume burst traffic during major OS releases and product launch events.
 
-### 1.2 What We Intentionally Chose NOT to Build
-- **Open-Ended Conversational Chitchat:** Twitter support is functional and terse (280 character limit). Open-ended persona roleplay increases hallucination risk without customer value.
-- **Automated Social Media Password Resets:** We intentionally forbid in-channel account resets to prevent social engineering phishing vectors.
-- **Unbounded Deep Multi-Turn Autonomous Dialogue:** High-stakes financial and hardware disputes are escalated after initial triage to human specialists rather than risking multi-turn customer hallucination loops.
+On public Twitter customer support channels, "good" support differs sharply from generic chat:
+
+1. **Absolute Public Privacy & Zero PII Leakage:** The agent must never request or expose sensitive credentials in public tweets.
+2. **Actionable First-Turn Triage:** Replies must provide official, verified Apple troubleshooting subdomains (`apple.co`, `locate.apple.com`, `iforgot.apple.com`, `reportaproblem.apple.com`) or concise self-serve steps.
+3. **Safety-Critical Hardware Interception:** Catastrophic hardware hazards (e.g., lithium battery swelling, thermal anomalies) must bypass automated resolution immediately with urgent safety advisories.
+4. **Sub-10ms High-Throughput Triage:** Twitter support queues experience burst traffic during major OS releases.
+
+### 1.2 Data Pipeline: From Raw Kaggle Dataset to Clean Corpus
+
+The system ingests the real **thoughtvector/customer-support-on-twitter** dataset (3M+ tweets):
+
+1. Downloaded via `kagglehub` with automatic caching
+2. Flat tweet CSV reconstructed into multi-turn threads using `response_tweet_id` / `in_response_to_tweet_id`
+3. Filtered to @AppleSupport brand conversations (identified by tweet content heuristics)
+4. Real tweet noise handled: anonymised handles (`@115712` → `@user`), t.co URLs → `[URL]`, whitespace normalisation
+5. Each pair labeled with intent (7-class heuristic) and escalation decision
+6. Training corpus explicitly deduplicated against golden eval set (verified 0% leakage)
+
+**Fallback:** When Kaggle credentials are unavailable, the pipeline uses a clearly-labeled synthetic corpus for offline reproducibility.
+
+### 1.3 What We Intentionally Chose NOT to Build
+
+- **Open-Ended Conversational Chitchat** — increases hallucination risk without customer value.
+- **Automated Public Password Resets** — prevents social engineering vectors.
+- **Unbounded Multi-Turn Autonomous Dialogue** — high-stakes disputes escalated to humans.
 
 ---
 
 ## 2. Empirical Benchmark Results vs. Baselines
 
-We evaluated three architectures across the 200 hand-annotated Golden Evaluation Set:
-1. **Baseline 0 (Trivial Baseline):** Majority class predictor (`OS_UPDATE_BUG`), static auto-handle decision, static canned reply.
-2. **Baseline 1 (Simple Baseline):** Heuristic keyword search classifier, punctuation/exclamation escalation rule, generic ungrounded zero-shot prompt.
-3. **Proposed System (Production Agent):** 7-class hybrid intent classifier (TF-IDF + Calibrated Logistic Regression + Heuristic Boosting), BM25/TF-IDF historical resolution retrieval, and multi-criteria deterministic escalation router.
+Three architectures evaluated on the 200-sample Golden Evaluation Set:
 
-### 2.1 Comparative Benchmark Matrix
+1. **Baseline 0 (Trivial):** Majority class predictor (`OS_UPDATE_BUG`), static auto-handle, canned reply.
+2. **Baseline 1 (Simple):** Keyword classifier, punctuation escalation rule, generic ungrounded reply.
+3. **Proposed System:** 7-class TF-IDF + Calibrated Logistic Regression + Heuristic Boosting, TF-IDF cosine retrieval, deterministic multi-criteria escalation router, Gemini LLM reply generation (or template fallback).
 
-| Metric Dimension | Baseline 0 (Trivial Canned) | Baseline 1 (Simple Zero-Shot) | Proposed Agent (Hybrid RAG) | Relative Delta vs B1 |
-| :--- | :---: | :---: | :---: | :---: |
-| **Intent Accuracy** | 9.5% | 21.5% | **99.5%** | **+362.8%** |
-| **Intent Macro F1** | 0.025 | 0.158 | **0.995** | **+529.7%** |
-| **Escalation Precision** | 0.000 | 0.800 | **1.000** | **+25.0%** |
-| **Escalation Recall** | 0.000 | 0.074 | **1.000** | **+1251.3%** |
-| **Escalation F1 Score** | 0.000 | 0.136 | **1.000** | **+635.3%** |
-| **High-Risk Safety Miss Rate** | 100.0% *(54/54)* | 92.6% *(50/54)* | **0.0% *(0/54)*** | **-100% (Zero Misses)** |
-| **ROUGE-L Score** | 0.117 | 0.096 | **0.969** | **+909.4%** |
-| **BLEU-4 Score** | 0.013 | 0.014 | **0.932** | **+6557.1%** |
-| **Semantic Cosine Sim** | 0.085 | 0.081 | **0.965** | **+1091.4%** |
-| **LLM Judge Score** | 4.25 / 5.0 | 3.27 / 5.0 | **4.85 / 5.0** | **+48.3%** |
-| **Average Latency (ms)** | 0.0 ms | 0.06 ms | **2.49 ms** | Sub-3ms Real-Time |
+> **Benchmark numbers update after re-running with leakage-free data.** Results will be populated by running `python -m src.eval_harness`.
 
-### 2.2 LLM-as-a-Judge Validation & Inter-Rater Reliability
-To verify that our automated LLM Judge rubric can be trusted, we evaluated judge predictions against 50 human-annotated reference scores across Groundedness, Voice, Actionability, and Safety:
-- **Quadratic Weighted Cohen’s Kappa ($\kappa$):** `0.6833` *(Substantial Inter-Rater Agreement)*
-- **Pearson Correlation ($r$):** `0.7050` ($p = 1.09 \times 10^{-8}$)
-- **Spearman Rank Correlation ($\rho$):** `0.7408`
-- **Mean Human vs. Judge Rating:** Human: `3.77 / 5.0` vs Judge: `3.38 / 5.0`
+### 2.1 Judge Validation & Inter-Rater Reliability
+
+The judge evaluation uses either:
+- **Gemini LLM** (when `GEMINI_API_KEY` is set): Structured rubric prompt scoring 4 dimensions
+- **Heuristic fallback** (no key): Keyword-based deterministic scorer
+
+Inter-rater agreement against 50 human-annotated samples (methodology: 20 genuine author self-annotations + 30 calibrated programmatic scores, transparently documented in `data/human_judge_ratings.json`):
+
+- **Quadratic Weighted Cohen's Kappa (κ):** Measured at runtime
+- **Pearson Correlation (r):** Measured at runtime
+- **Methodology disclosure:** The "human" ratings combine 20 genuine manual author ratings (with specific per-case annotation notes) and 30 calibrated programmatic ratings. This is explicitly labeled in the JSON output (`annotation_method: "manual"` vs `"programmatic_rubric"`).
 
 ---
 
 ## 3. In-Depth Failure Analysis: Top 5 Failure Modes
 
-Through rigorous stress-testing, we identified 5 distinct edge-case failure modes and established concrete root-cause hypotheses:
-
-```
-+---------------------------------------------------------------------------------------------+
-|                                    FAILURE TAXONOMY                                         |
-|  [1. Adversarial Multi-Intent] -> [2. Sarcastic Inverted Polarity] -> [3. Social PII Traps] |
-|  [4. Baseband IC Ambiguity]   -> [5. Contextless Single-Turn Truncation]                    |
-+---------------------------------------------------------------------------------------------+
-```
+Through stress-testing, we identified 5 distinct edge-case failure modes with regression tests in `tests/test_failure_modes.py`:
 
 ### 1. Adversarial Multi-Intent Queries (Software vs. Physical Hazard)
-- **Real Example:** *"@AppleSupport WatchOS 10 completely ruined my battery life and my Apple Watch battery swells up when on the magnetic charger!!"*
-- **Root Cause & Hypothesis:** The message contains prominent software update keywords (`WatchOS 10`, `ruined battery life`) alongside severe physical damage (`battery swells up`). Standard NLP models assign high probability to `OS_UPDATE_BUG` and output reboot instructions, missing the dangerous fire hazard.
-- **Architectural Mitigation:** We introduced a **Priority-Ordered Safety Pre-Filter** that intercepts thermal, swelling, and puncture keywords before intent vectorization, enforcing an immediate hardware escalation override.
+- **Example (constructed adversarial):** *"@AppleSupport WatchOS 10 completely ruined my battery life and my Apple Watch battery swells up when on the magnetic charger!!"*
+- **Root Cause:** The message contains software update keywords alongside severe physical damage. Standard NLP models prioritise `OS_UPDATE_BUG` and miss the fire hazard.
+- **Mitigation:** Priority-Ordered Safety Pre-Filter intercepts thermal/swelling keywords before intent classification, enforcing immediate hardware escalation.
+- **Regression test:** `test_failure_modes.py::TestAdversarialMultiIntent`
 
-### 2. Sarcasm and Inverted Polarity Bugs
-- **Real Example:** *"@AppleSupport Brilliant new feature in iOS 17 where alarms just decide to stay completely silent and make me late for work! 😡"*
-- **Root Cause & Hypothesis:** Sarcastic phrasing ("Brilliant new feature") causes lexical sentiment models to falsely classify the message as positive feature praise rather than identifying an Attention Aware feature audio bug.
-- **Architectural Mitigation:** Sublinear TF-IDF n-grams (1-3 tokens) with domain sentiment masking preserve the technical bug context (`alarms stay completely silent`) over superficial cheerfulness.
+### 2. Sarcasm and Inverted Polarity
+- **Example (constructed adversarial):** *"@AppleSupport Brilliant new feature in iOS 17 where alarms just decide to stay completely silent and make me late for work! 😡"*
+- **Root Cause:** Sarcastic phrasing causes lexical models to classify as positive feedback.
+- **Mitigation:** N-gram TF-IDF (1-3 tokens) with domain context preserves technical bug keywords over superficial cheerfulness.
+- **Regression test:** `test_failure_modes.py::TestSarcasmInvertedPolarity`
 
 ### 3. Public Password Reset & Phishing Lures
-- **Real Example:** *"@AppleSupport I forgot my Apple ID passcode and my device is disabled. Can you reset it for me over Twitter?"*
-- **Root Cause & Hypothesis:** Generic LLM agents frequently attempt to assist by soliciting customer information directly in the conversation.
-- **Architectural Mitigation:** Strict policy guardrails prohibit interactive credential verification on public Twitter threads, automatically routing the user to `https://iforgot.apple.com`.
+- **Example (constructed adversarial):** *"@AppleSupport I forgot my Apple ID passcode. Can you reset it for me over Twitter?"*
+- **Root Cause:** Generic agents attempt to assist by soliciting credentials publicly.
+- **Mitigation:** Strict policy guardrails prohibit interactive credential verification, routing to `iforgot.apple.com`.
+- **Regression test:** `test_failure_modes.py::TestPIIPhishingTrap`
 
 ### 4. Hardware Baseband vs. Software Network Glitches
-- **Real Example:** *"@AppleSupport Wi-Fi button on my iPhone is greyed out and Bluetooth toggle spins forever."*
-- **Root Cause & Hypothesis:** Standard connectivity troubleshooting (Reset Network Settings) fails because a greyed-out Wi-Fi button indicates physical desoldering of the Wi-Fi IC chip on the motherboard.
-- **Architectural Mitigation:** Explicit pattern matching for `greyed out` / `toggle spins` triggers hardware diagnostic routing rather than generic software reset guides.
+- **Example (constructed adversarial):** *"@AppleSupport Wi-Fi button on my iPhone is greyed out and Bluetooth toggle spins forever."*
+- **Root Cause:** Greyed-out Wi-Fi indicates physical desoldering of the Wi-Fi IC chip, not a software glitch.
+- **Mitigation:** Pattern matching for `greyed out` / `toggle spins` triggers hardware diagnostic routing.
+- **Regression test:** `test_failure_modes.py::TestHardwareSoftwareAmbiguity`
 
-### 5. Multi-Turn Context Truncation on Public Threads
-- **Real Example:** *"@AppleSupport Done that already. Still not working."* (Isolated follow-up tweet)
-- **Root Cause & Hypothesis:** Single-turn inference lacks knowledge of what "that" referred to in the prior parent tweet.
-- **Architectural Mitigation:** Low-confidence thresholding ($\text{confidence} < 0.35$) catches context-deficient queries and routes them to human agent queues.
+### 5. Multi-Turn Context Truncation
+- **Example (constructed adversarial):** *"@AppleSupport Done that already. Still not working."*
+- **Root Cause:** Single-turn inference lacks context from prior tweets.
+- **Mitigation:** Low-confidence thresholding (< 0.35) catches context-deficient queries and routes to human queues.
+- **Regression test:** `test_failure_modes.py::TestContextTruncation`
 
 ---
 
 ## 4. Mandatory Section: "What is misleading about my headline number?"
 
-While our headline result of **99.5% accuracy, 0.0% safety miss rate, and 0.969 ROUGE-L** demonstrates strong algorithmic performance, honest engineering requires acknowledging the inherent limitations and potential blind spots:
+### 1. Train/Eval Data Leakage (Fixed)
+- **The Problem:** In the initial version, 31.5% of the golden eval examples were exact duplicates of training corpus entries, inflating accuracy to 99.5%. This was the most critical issue.
+- **The Fix:** The data pipeline now explicitly deduplicates the golden set against the training corpus and runs `verify_no_leakage()` before every benchmark. The leakage verification is saved to `data/leakage_verification.json` and logged in benchmark output.
+- **Current Status:** 0% leakage verified.
 
-### 1. The Synthetic Golden Set Realism Gap
-- **The Blind Spot:** Our 200-sample Golden Set was hand-crafted to test diverse edge cases and prototypical customer complaints. However, real-world Twitter data contains severe typographical corruption, non-standard slang, emojis as punctuation, code-switching across languages, and OCR screenshots of error dialogs.
-- **Reality:** In live production on unfiltered Twitter streams, real-world accuracy is likely closer to **88–92%** due to out-of-vocabulary slang and image-only error reporting.
+### 2. Heuristic Intent Labels on Real Data
+- **The Blind Spot:** Intent labels on real Kaggle tweets are assigned by keyword heuristics, not by human annotators reviewing each tweet. This means some labels may be incorrect, especially for ambiguous tweets.
+- **Reality:** A human annotation pass on a random sample would likely reveal 5-15% label noise, which means real-world accuracy is lower than reported.
 
-### 2. Lexical ROUGE / BLEU Metric Traps in Customer Support
-- **The Blind Spot:** ROUGE-L and BLEU-4 measure n-gram overlap against our reference responses. A model could generate a technically incorrect answer that shares 85% of words with the gold response (e.g., recommending a network reset instead of a keyboard reset) and still achieve a high ROUGE score.
-- **Reality:** ROUGE is a proxy for stylistic alignment, not semantic truth. Real grounding must be measured by task resolution rate in live agent trials.
+### 3. LLM Judge Availability
+- **The Blind Spot:** If `GEMINI_API_KEY` is not set, the "LLM-as-a-Judge" falls back to a heuristic keyword scorer. This is not an LLM at all — it's a deterministic rule-based evaluator. The system is transparent about this in output metadata (`scorer: "heuristic_fallback"` vs `"gemini_llm"`).
+- **Reality:** Full LLM judge results require a valid Gemini API key.
 
-### 3. Escalation Cost vs. Safety Trade-Off (The Precision Penalty)
-- **The Blind Spot:** Our **0.0% high-risk miss rate** was achieved by setting aggressive safety escalation filters. 
-- **Reality:** In a live deployment, this conservative threshold causes ~5-8% false positive escalations (e.g., a customer casually saying "this update is absolute fire" might trigger the fire/hazard filter), adding unnecessary volume to human advisor queues.
+### 4. Synthetic Golden Set Realism Gap
+- **The Blind Spot:** ~10 of the 200 golden eval cases are hand-crafted adversarial examples (clearly labeled as `source: "constructed_adversarial"`). These test important edge cases but don't represent natural tweet distribution.
+- **Reality:** On purely organic, unseen Twitter streams, accuracy may be 10-15% lower due to OOV slang, emoji-only messages, and image-based error reporting.
+
+### 5. ROUGE/BLEU Metric Traps
+- **The Blind Spot:** ROUGE-L and BLEU-4 measure n-gram overlap, not semantic correctness. A technically wrong answer sharing 85% of words with the reference still scores high.
+- **Reality:** ROUGE is a proxy for stylistic alignment, not task resolution. Real grounding needs live agent trial measurement.
+
+### 6. Human Agreement Methodology
+- **The Blind Spot:** The inter-rater agreement dataset uses a hybrid approach: 20 genuine author self-annotations and 30 calibrated programmatic ratings. The programmatic ratings are not from independent human raters — they follow a predetermined quality tier pattern.
+- **Reality:** True inter-rater reliability requires multiple independent annotators. The current approach provides a calibration baseline, not a gold-standard agreement measurement.
 
 ---
 
 ## 5. What I Would Do Next with One More Week
 
-If granted one additional week of development time, our roadmap would prioritize:
-
-1. **Multi-Turn Graph Stitching:** Integrate Twitter conversation ID graph traversal to reconstruct the entire 3–5 turn thread history, resolving single-turn context truncation.
-2. **AppleCare Telemetry & Entitlement API Mock:** Connect the agent to a mock AppleCare entitlement service to dynamically check warranty expiration and AppleCare+ deductible pricing before drafting repair estimates.
-3. **Cross-Lingual Multilingual Embeddings:** Incorporate `XLM-RoBERTa` or multilingual sentence transformers to natively support Spanish, French, German, and Japanese customer queries.
-4. **Active Learning Queue & Feedback Loop:** Build an automated pipeline that ingests human advisor corrections from the DM queue to continuously fine-tune classifier weights and expand the retrieval corpus.
+1. **Full Human Annotation Pass:** Hire 2-3 annotators to independently label intent, escalation, and judge scores on 200 real tweets for proper inter-rater reliability.
+2. **Multi-Turn Thread Context:** Integrate Twitter conversation ID graph traversal to reconstruct 3-5 turn thread history, resolving single-turn context truncation.
+3. **Multilingual Embeddings:** Incorporate sentence transformers for multilingual support (Spanish, French, German, Japanese customer queries).
+4. **Active Learning Feedback Loop:** Build pipeline to ingest human advisor corrections from DM queue to continuously retrain the classifier.
+5. **Deploy Gemini Judge at Scale:** Batch-evaluate all 200 golden cases through the LLM judge and report both LLM and heuristic scores side-by-side.
 
 ---
 
 ## Conclusion
-The developed system demonstrates that turning messy social support data into a trustworthy AI agent requires balancing statistical learning with deterministic safety policies. By prioritizing verifiable safety, zero PII exposure, and transparent execution traces, the agent provides a production-ready blueprint for autonomous customer support at enterprise scale.
+
+This system demonstrates that building a trustworthy AI support agent from real-world data requires handling messy tweet noise, preventing train/eval leakage, being honest about evaluation methodology, and providing transparent fallback behavior when external services (LLM APIs, Kaggle) are unavailable.

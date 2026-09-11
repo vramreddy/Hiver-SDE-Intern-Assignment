@@ -1,16 +1,15 @@
-# @AppleSupport Autonomous Customer Support AI Agent & Evaluation Harness
+# @AppleSupport Customer Support AI Agent & Evaluation Harness
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com)
-[![Tests Passing](https://img.shields.io/badge/tests-12%2F12%20passed-brightgreen.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 > **Hiver SDE Intern Take-Home Assignment Solution**  
-> An enterprise-grade, verifiable AI customer support pipeline built for **@AppleSupport** (Twitter Customer Support Dataset) featuring 7-class intent classification, hybrid RAG historical resolution grounding, deterministic safety escalation, an automated LLM-as-a-Judge rubric with human inter-rater reliability proof, and an interactive glassmorphic web dashboard.
+> A customer support AI pipeline for **@AppleSupport** featuring 7-class intent classification, TF-IDF retrieval grounding, deterministic safety escalation, Gemini LLM-as-a-Judge evaluation with human inter-rater reliability measurement, and an interactive web dashboard.
 
 ---
 
-## 🚀 Quickstart: Reproduce Headline Results in Under 2 Minutes
+## 🚀 Quickstart
 
 ### 1. Clone & Install Dependencies
 ```bash
@@ -19,37 +18,63 @@ cd hiver-sde-intern-assignment
 pip install -r requirements.txt
 ```
 
-### 2. Run Automated Test Suite (12/12 Passed)
+### 2. Configure API Keys
+
+**Kaggle (for real dataset ingestion):**
+```bash
+# Option A: Place credentials file
+# Download from https://www.kaggle.com/settings → API → Create New Token
+# Save to ~/.kaggle/kaggle.json
+
+# Option B: Environment variables
+export KAGGLE_USERNAME="your_username"
+export KAGGLE_KEY="your_api_key"
+```
+
+**Gemini LLM (for LLM judge & reply generation):**
+```bash
+# Get a free API key at https://aistudio.google.com/
+export GEMINI_API_KEY="your_gemini_api_key"
+```
+
+> **Note:** The system works without API keys — it falls back to a synthetic corpus and heuristic scoring. API keys enable the full pipeline with real data and LLM features.
+
+### 3. Initialise Data Pipeline
+```bash
+python -m src.data_pipeline
+```
+This downloads the Kaggle dataset, extracts @AppleSupport tweet threads, builds the training corpus (1,500 pairs), golden eval set (200 cases), and human annotation benchmark (50 cases). If Kaggle credentials are not configured, it falls back to a synthetic corpus.
+
+### 4. Run Automated Test Suite
 ```bash
 python -m pytest -v
 ```
 
-### 3. Run Headline Benchmark Evaluation (Golden Set of 200 Hand-Annotated Cases)
+### 5. Run Headline Benchmark Evaluation
 ```bash
 python -m src.eval_harness
 ```
 
-### 4. Launch Interactive Web App & Visual Dashboard
+### 6. Launch Interactive Web Dashboard
 ```bash
 python -m uvicorn src.server:app --host 127.0.0.1 --port 8000
 ```
-Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser to test live queries in the Sandbox, compare baselines side-by-side, explore the Golden Set, and view the live benchmark charts.
+Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** to test live queries, compare baselines side-by-side, and view benchmark charts.
 
 ---
 
-## 📊 Headline Benchmark Summary (200 Golden Samples)
+## 📊 Data Pipeline & Dataset
 
-| Architecture | Intent Accuracy | Intent Macro F1 | Escalation F1 | High-Risk Safety Miss Rate | ROUGE-L | BLEU-4 | Judge Score | Latency (avg) |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Baseline 0 (Trivial Canned)** | 9.5% | 0.025 | 0.000 | 100.0% *(54/54)* | 0.117 | 0.013 | 4.25 / 5.0 | 0.0 ms |
-| **Baseline 1 (Simple Zero-Shot)** | 21.5% | 0.158 | 0.136 | 92.6% *(50/54)* | 0.096 | 0.014 | 3.27 / 5.0 | 0.06 ms |
-| **Proposed Agent (Hybrid RAG)** | **99.5%** | **0.995** | **1.000** | **0.0% *(0/54)*** | **0.969** | **0.932** | **4.85 / 5.0** | **2.49 ms** |
+The system ingests the real **[Kaggle Customer Support on Twitter](https://www.kaggle.com/datasets/thoughtvector/customer-support-on-twitter)** dataset:
 
-### LLM-as-a-Judge vs. Human Inter-Rater Reliability
-- **Quadratic Weighted Cohen's Kappa ($\kappa$):** `0.6833` *(Substantial Inter-Rater Agreement)*
-- **Pearson Correlation ($r$):** `0.7050` ($p = 1.09 \times 10^{-8}$)
-- **Spearman Rank Correlation ($\rho$):** `0.7408`
-- **Mean Human Rating vs. Judge Rating:** `3.77 / 5.0` vs. `3.38 / 5.0`
+1. **Download** via `kagglehub` (cached after first download)
+2. **Thread reconstruction** from flat tweet CSV using `response_tweet_id` / `in_response_to_tweet_id`
+3. **Filter** to @AppleSupport brand conversations
+4. **Clean** real tweet noise: anonymised handles (`@115712`), t.co URLs, emoji, whitespace
+5. **Label** intents and escalation decisions via keyword heuristics
+6. **Deduplicate** training corpus against golden eval set (0% leakage verified)
+
+**Fallback mode:** If Kaggle credentials are not available, the pipeline uses a synthetic corpus (clearly labeled) for offline reproducibility.
 
 ---
 
@@ -60,15 +85,15 @@ Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser to test 
                                               │
                    ┌──────────────────────────┴──────────────────────────┐
                    ▼                                                     ▼
-   [ Deterministic Safety Filter ]                           [ Feature Vectorizer ]
-   (Battery Swelling / Fire / PII)                           (1-3 Grams Sublinear TF-IDF)
+   [ Deterministic Safety Filter ]                           [ Feature Vectoriser ]
+   (Battery Swelling / Fire / PII)                           (1-3 Gram Sublinear TF-IDF)
                    │                                                     │
                    │ (If Critical Hazard)                                ▼
                    │                                          [ Intent Classifier ]
-                   │                                       (7-Class Calibrated Logistic)
+                   │                                       (7-Class Calibrated LogReg)
                    │                                                     │
                    ▼                                                     ▼
-     [ Immediate Safety Escalation ]                          [ Hybrid RAG Engine ]
+     [ Immediate Safety Escalation ]                          [ TF-IDF Retrieval Engine ]
      (Override with Urgent Warning)                       (Historical @AppleSupport Pairs)
                    │                                                     │
                    └──────────────────────────┬──────────────────────────┘
@@ -77,12 +102,12 @@ Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser to test 
                                  (Auto-Handle vs Human + Stated Reason)
                                               │
                                               ▼
-                                 [ Tone-Calibrated Draft Reply ]
-                                 (@AppleSupport Signature Voice)
+                                 [ Draft Reply Generation ]
+                                 (Gemini LLM or Template Fallback)
                                               │
                                               ▼
                                  [ LLM-as-a-Judge Evaluation ]
-                                 (Groundedness, Voice, Actionability, Safety)
+                                 (Gemini API or Heuristic Fallback)
 ```
 
 ---
@@ -91,42 +116,48 @@ Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser to test 
 
 ```
 ├── data/
-│   ├── apple_support_corpus.json          # 1,500 curated historical @AppleSupport pairs
-│   ├── golden_eval_set.json               # 200 hand-annotated test cases (JSON)
-│   ├── golden_eval_set.csv                # 200 hand-annotated test cases (CSV)
-│   ├── human_judge_ratings.json           # 50 human scored samples for Kappa validation
-│   └── evaluation_benchmark_results.json  # Exported official benchmark results
+│   ├── apple_support_corpus.json          # Training corpus (real Kaggle data or synthetic fallback)
+│   ├── golden_eval_set.json               # 200 annotated test cases (JSON)
+│   ├── golden_eval_set.csv                # 200 annotated test cases (CSV)
+│   ├── human_judge_ratings.json           # 50 scored samples (20 manual + 30 programmatic)
+│   ├── leakage_verification.json          # Train/eval leakage check results
+│   └── evaluation_benchmark_results.json  # Benchmark output
 ├── src/
 │   ├── __init__.py
-│   ├── config.py                          # 7-Class taxonomy, reasons, brand metadata
-│   ├── data_pipeline.py                   # Ingestion, thread parsing, golden set builder
-│   ├── intent_classifier.py               # Hybrid ML + Heuristic intent engine
-│   ├── retrieval_engine.py                # Hybrid BM25 & Semantic vector retrieval
+│   ├── config.py                          # 7-class taxonomy, escalation reasons, brand metadata
+│   ├── data_pipeline.py                   # Kaggle ingestion, thread parsing, corpus building
+│   ├── intent_classifier.py               # TF-IDF + LogReg + regex heuristic intent engine
+│   ├── retrieval_engine.py                # TF-IDF cosine similarity retrieval
 │   ├── escalation_policy.py               # Deterministic & risk-aware triage router
-│   ├── agent.py                           # Unified customer support pipeline
-│   ├── judge.py                           # 4-axis LLM judge & Kappa correlation tester
-│   ├── eval_harness.py                    # Multi-baseline benchmarking suite
-│   └── server.py                          # FastAPI backend exposing REST APIs
+│   ├── agent.py                           # Unified support pipeline (LLM or template reply)
+│   ├── llm_client.py                      # Gemini API wrapper with graceful degradation
+│   ├── judge.py                           # Gemini LLM judge + heuristic fallback scorer
+│   ├── eval_harness.py                    # Multi-baseline benchmarking with leakage check
+│   └── server.py                          # FastAPI backend
 ├── web/
-│   ├── index.html                         # Full interactive web application
-│   ├── style.css                          # Glassmorphic dark theme stylesheet
-│   └── app.js                             # Client-side state & visualization engine
+│   ├── index.html                         # Interactive web application
+│   ├── style.css                          # Dark theme stylesheet
+│   └── app.js                             # Client-side state & visualisation engine
 ├── tests/
 │   ├── test_agent.py                      # End-to-end agent tests
 │   ├── test_escalation.py                 # Escalation policy safety tests
 │   ├── test_intent.py                     # Intent classification unit tests
-│   └── test_judge.py                      # Support judge rubric tests
-├── REPORT.md                              # Mandatory executive report (< 6 pages)
-├── DECISION_LOG.md                        # 15 non-obvious engineering decisions & trade-offs
-├── README.md                              # Reproduction guide & documentation
+│   ├── test_judge.py                      # Judge rubric tests
+│   ├── test_failure_modes.py              # Regression tests for 5 documented failure modes
+│   ├── test_server.py                     # FastAPI endpoint integration tests
+│   ├── test_data_pipeline.py              # Data pipeline & leakage verification tests
+│   └── test_retrieval_engine.py           # Retrieval engine tests
+├── REPORT.md                              # Technical & evaluation report
+├── DECISION_LOG.md                        # 18 engineering decisions & trade-offs
+├── README.md                              # This file
 └── requirements.txt                       # Project dependencies
 ```
 
 ---
 
-## 🎯 Intent Taxonomy (7 Grounded Classes)
+## 🎯 Intent Taxonomy (7 Classes)
 
-1. `OS_UPDATE_BUG`: Issues after iOS/macOS updates, boot loops, freezes, camera/app crashes.
+1. `OS_UPDATE_BUG`: Issues after iOS/macOS updates, boot loops, freezes, app crashes.
 2. `HARDWARE_BATTERY`: Degraded battery health, overheating, swollen enclosures, physical ports.
 3. `ACCOUNT_ICLOUD_SECURITY`: Locked Apple ID, 2FA, forgotten passwords, phishing alerts.
 4. `BILLING_SUBSCRIPTIONS`: Duplicate charges, App Store refund requests, subscription cancellation.
@@ -136,19 +167,20 @@ Open **[http://127.0.0.1:8000](http://127.0.0.1:8000)** in your browser to test 
 
 ---
 
-## 🛡️ Escalation Reasons & Policies
+## 🛡️ Escalation Policies
 
-- `HARDWARE_PHYSICAL_DAMAGE` *(Critical)*: Battery swelling, liquid submersion, thermal hazard.
-- `HIGH_SENTIMENT_CHURN_RISK` *(High)*: Legal threats, extreme frustration, competitor churn.
-- `BILLING_REFUND_AUTH` *(Medium)*: Financial disputes, duplicate charges, unauthorized billing.
-- `PII_SECURITY_DM` *(Medium)*: Apple ID recovery, serial number / diagnostic log collection.
-- `LOW_CONFIDENCE_AMBIGUITY` *(Low)*: Model confidence $< 0.35$ or ambiguous intent.
-- `STANDARD_TROUBLESHOOTING` *(Auto-Handle)*: Self-serve guides, force restarts, settings steps.
-- `PUBLIC_DOCS_GUIDE` *(Auto-Handle)*: Direct links to official Apple knowledgebase articles.
+| Reason | Risk Level | Trigger |
+|:---|:---|:---|
+| `HARDWARE_PHYSICAL_DAMAGE` | Critical | Battery swelling, liquid submersion, thermal hazard |
+| `HIGH_SENTIMENT_CHURN_RISK` | High | Legal threats, extreme frustration, competitor churn |
+| `BILLING_REFUND_AUTH` | Medium | Financial disputes, duplicate charges |
+| `PII_SECURITY_DM` | Medium | Apple ID recovery, serial number collection |
+| `LOW_CONFIDENCE_AMBIGUITY` | Low | Model confidence < 0.35, ambiguous intent |
+| `STANDARD_TROUBLESHOOTING` | Auto-Handle | Self-serve guides, force restarts |
+| `PUBLIC_DOCS_GUIDE` | Auto-Handle | Official Apple knowledgebase links |
 
 ---
 
-## 📄 Documentation Links
-- **Full Report:** [REPORT.md](file:///c:/Users/vrami/Desktop/Hiver%20SDE%20Intern-Assignment/REPORT.md) (Problem framing, Baseline comparisons, Top 5 failure modes with hypotheses, Mandatory *"What is misleading about my headline number?"*, Next week roadmap)
-- **Decision Log:** [DECISION_LOG.md](file:///c:/Users/vrami/Desktop/Hiver%20SDE%20Intern-Assignment/DECISION_LOG.md) (15 non-obvious decisions & deep technical reasoning)
-- **Submission Form:** Notion submission portal provided in take-home brief.
+## 📄 Documentation
+- **Full Report:** [REPORT.md](./REPORT.md)
+- **Decision Log:** [DECISION_LOG.md](./DECISION_LOG.md)

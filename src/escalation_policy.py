@@ -19,8 +19,10 @@ class EscalationPolicy:
         ]
         
         self.hardware_damage_patterns = [
-            re.compile(r'\b(swell|swelling|swollen|smoke|smoking|spark|burning|burn\s*mark|exploded|fire)\b', re.I),
-            re.compile(r'\b(submerged|bathtub|dropped\s*in\s*water|liquid\s*damage|shattered\s*back|hinge\s*lines)\b', re.I)
+            re.compile(r'\b(swells?|swelling|swollen|smoke|smoking|spark|burning|burn\s*mark|exploded|fire)\b', re.I),
+            re.compile(r'\b(submerged|bathtub|dropped\s*in\s*water|liquid\s*damage|shattered\s*back|hinge\s*lines)\b', re.I),
+            re.compile(r'\b(wi-?fi|wifi|bluetooth).{0,60}(grey|gray)e?d?\s*out\b', re.I),
+            re.compile(r'\b(grey|gray)e?d?\s*out\b', re.I),
         ]
 
         self.billing_auth_patterns = [
