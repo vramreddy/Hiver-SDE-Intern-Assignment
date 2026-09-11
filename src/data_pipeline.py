@@ -16,7 +16,7 @@ import json
 import csv
 import random
 import logging
-from typing import List, Dict, Any, Tuple, Optional
+from typing import List, Dict, Any, Tuple, Optional, Set
 
 import pandas as pd
 
@@ -52,19 +52,24 @@ def download_kaggle_dataset() -> str:
 
 
 def find_csv_in_path(dataset_path: str) -> Optional[str]:
-    """Locate the twcs.csv (or similar) file inside the downloaded dataset directory."""
+    """Locate the twcs.csv (or largest CSV) file inside the downloaded dataset directory."""
     if not dataset_path or not os.path.exists(dataset_path):
         return None
 
-    # kagglehub may return a directory or file path
     if os.path.isfile(dataset_path) and dataset_path.endswith(".csv"):
         return dataset_path
 
+    csv_files = []
     for root, _dirs, files in os.walk(dataset_path):
         for f in files:
             if f.endswith(".csv"):
-                return os.path.join(root, f)
-    return None
+                full_path = os.path.join(root, f)
+                csv_files.append((full_path, os.path.getsize(full_path)))
+    if not csv_files:
+        return None
+    # Prioritize twcs.csv specifically, or largest CSV
+    csv_files.sort(key=lambda x: (1 if "twcs.csv" in x[0].lower() else 0, x[1]), reverse=True)
+    return csv_files[0][0]
 
 
 # ---------------------------------------------------------------------------
@@ -94,6 +99,16 @@ def clean_tweet_text(text: str) -> str:
 # 3. THREAD RECONSTRUCTION from flat tweet CSV
 # ---------------------------------------------------------------------------
 
+def _norm_id(val: Any) -> str:
+    """Normalizes tweet ID strings, handling float conversions like 698.0 -> 698."""
+    if pd.isna(val) or val is None or val == "" or str(val) == "nan":
+        return ""
+    s = str(val).strip()
+    if s.endswith(".0"):
+        s = s[:-2]
+    return s
+
+
 def parse_twitter_threads(csv_path: str) -> pd.DataFrame:
     """
     Reads the raw Kaggle CSV and returns a DataFrame.
@@ -103,9 +118,9 @@ def parse_twitter_threads(csv_path: str) -> pd.DataFrame:
     logger.info("Parsing CSV: %s", csv_path)
     df = pd.read_csv(csv_path, dtype={"tweet_id": str, "response_tweet_id": str,
                                        "in_response_to_tweet_id": str})
-    df["tweet_id"] = df["tweet_id"].astype(str).str.strip()
-    df["response_tweet_id"] = df["response_tweet_id"].fillna("").astype(str).str.strip()
-    df["in_response_to_tweet_id"] = df["in_response_to_tweet_id"].fillna("").astype(str).str.strip()
+    df["tweet_id"] = df["tweet_id"].apply(_norm_id)
+    df["response_tweet_id"] = df["response_tweet_id"].apply(_norm_id)
+    df["in_response_to_tweet_id"] = df["in_response_to_tweet_id"].apply(_norm_id)
     df["inbound"] = df["inbound"].astype(bool)
     df["text"] = df["text"].fillna("")
     logger.info("Loaded %d tweets from CSV", len(df))
@@ -117,65 +132,51 @@ def extract_apple_support_pairs(df: pd.DataFrame, max_pairs: int = 3000) -> List
     Filters to @AppleSupport conversations and extracts customer→agent pairs.
 
     Logic:
-      1. Identify AppleSupport author_ids (outbound tweets mentioning Apple patterns)
-      2. For each outbound AppleSupport tweet, find the inbound tweet it responds to
-      3. Pair them as (customer_text, agent_text)
+      1. Identify AppleSupport outbound tweets
+      2. Match each outbound tweet to the parent customer inbound tweet
+      3. Clean and deduplicate by customer text
     """
-    # Identify AppleSupport brand author(s) — outbound tweets (inbound=False)
-    # The dataset uses anonymised author_ids, so we detect the Apple brand by
-    # looking for the most prolific outbound author whose tweets contain Apple-specific
-    # signals (apple.co, Apple Store, etc.)
     outbound = df[~df["inbound"]].copy()
-    inbound = df[df["inbound"]].copy()
-
-    if outbound.empty or inbound.empty:
-        logger.warning("No outbound/inbound tweets found.")
+    if outbound.empty:
+        logger.warning("No outbound tweets found.")
         return []
 
-    # Heuristic: find author_ids whose outbound text frequently contains Apple-specific terms
-    apple_signals = re.compile(
-        r'(apple\.co|support\.apple|locate\.apple|iforgot\.apple|appleid\.apple|'
-        r'apple\s*store|genius\s*bar|applecare|iphone|ipad|macbook|airpods|'
-        r'apple\s*watch|ios\s*\d|macos|ipados|watchos)', re.I
-    )
+    # Identify AppleSupport author
+    if "AppleSupport" in outbound["author_id"].values:
+        apple_outbound = outbound[outbound["author_id"] == "AppleSupport"].copy()
+    else:
+        apple_signals = re.compile(
+            r'(apple\.co|support\.apple|locate\.apple|iforgot\.apple|appleid\.apple|'
+            r'apple\s*store|genius\s*bar|applecare|iphone|ipad|macbook|airpods|'
+            r'apple\s*watch|ios\s*\d|macos|ipados|watchos)', re.I
+        )
+        outbound["is_apple"] = outbound["text"].apply(lambda t: bool(apple_signals.search(str(t))))
+        apple_author_counts = outbound[outbound["is_apple"]].groupby("author_id").size()
+        if apple_author_counts.empty:
+            return []
+        apple_authors = set(apple_author_counts.nlargest(5).index)
+        apple_outbound = outbound[outbound["author_id"].isin(apple_authors)].copy()
 
-    outbound["is_apple"] = outbound["text"].apply(lambda t: bool(apple_signals.search(str(t))))
-    apple_author_counts = outbound[outbound["is_apple"]].groupby("author_id").size()
+    logger.info("Found %d outbound AppleSupport tweets.", len(apple_outbound))
 
-    if apple_author_counts.empty:
-        # Broader fallback: find author with "AppleSupport" or similar in their tweets
-        outbound["mentions_apple"] = outbound["text"].str.contains("Apple", case=False, na=False)
-        apple_author_counts = outbound[outbound["mentions_apple"]].groupby("author_id").size()
+    # Fast indexed lookup of parent customer tweets
+    parent_ids = set(apple_outbound["in_response_to_tweet_id"]) - {""}
+    inbound_matches = df[df["tweet_id"].isin(parent_ids)]
+    inbound_lookup = dict(zip(inbound_matches["tweet_id"], inbound_matches["text"]))
+    logger.info("Indexed %d inbound parent tweets.", len(inbound_lookup))
 
-    if apple_author_counts.empty:
-        logger.warning("Could not identify AppleSupport author in dataset.")
-        return []
-
-    # Top Apple author(s)
-    apple_authors = set(apple_author_counts.nlargest(5).index)
-    logger.info("Identified %d Apple Support author IDs: %s", len(apple_authors), apple_authors)
-
-    # Filter outbound to Apple authors only
-    apple_outbound = outbound[outbound["author_id"].isin(apple_authors)].copy()
-
-    # Build lookup: tweet_id → row
-    inbound_lookup = {}
-    for _, row in inbound.iterrows():
-        inbound_lookup[str(row["tweet_id"])] = row
-
-    pairs: List[Dict[str, Any]] = []
+    # Stratified collection across all Apple support pairs
+    target_per_intent = max(10, max_pairs // len(INTENT_CLASSES))
+    intent_buckets: Dict[str, List[Dict[str, Any]]] = {intent: [] for intent in INTENT_CLASSES}
     seen_customer_texts = set()
 
     for _, agent_row in apple_outbound.iterrows():
-        parent_id = str(agent_row.get("in_response_to_tweet_id", "")).strip()
-        if not parent_id or parent_id == "nan":
+        parent_id = agent_row["in_response_to_tweet_id"]
+        if not parent_id or parent_id not in inbound_lookup:
             continue
 
-        customer_row = inbound_lookup.get(parent_id)
-        if customer_row is None:
-            continue
-
-        customer_text = clean_tweet_text(str(customer_row["text"]))
+        raw_cust_text = inbound_lookup[parent_id]
+        customer_text = clean_tweet_text(str(raw_cust_text))
         agent_text = clean_tweet_text(str(agent_row["text"]))
 
         # Skip very short / empty pairs
@@ -186,20 +187,27 @@ def extract_apple_support_pairs(df: pd.DataFrame, max_pairs: int = 3000) -> List
         text_key = customer_text.lower().strip()
         if text_key in seen_customer_texts:
             continue
-        seen_customer_texts.add(text_key)
 
-        pairs.append({
-            "customer_text": customer_text,
-            "agent_text": agent_text,
-            "source": "kaggle_twcs",
-            "tweet_id": str(customer_row["tweet_id"]),
-            "agent_tweet_id": str(agent_row["tweet_id"]),
-        })
+        intent, _ = label_intent_heuristic(customer_text)
+        if len(intent_buckets[intent]) < target_per_intent + 20:
+            seen_customer_texts.add(text_key)
+            intent_buckets[intent].append({
+                "customer_text": customer_text,
+                "agent_text": agent_text,
+                "source": "kaggle_twcs",
+                "tweet_id": parent_id,
+                "agent_tweet_id": agent_row["tweet_id"],
+            })
 
-        if len(pairs) >= max_pairs:
+        if all(len(b) >= target_per_intent for b in intent_buckets.values()):
             break
 
-    logger.info("Extracted %d Apple Support customer→agent pairs from Kaggle data", len(pairs))
+    pairs: List[Dict[str, Any]] = []
+    for intent, bucket in intent_buckets.items():
+        pairs.extend(bucket[:target_per_intent])
+
+    logger.info("Extracted %d stratified Apple Support customer→agent pairs across %d intents",
+                len(pairs), len(INTENT_CLASSES))
     return pairs
 
 
@@ -211,27 +219,27 @@ def extract_apple_support_pairs(df: pd.DataFrame, max_pairs: int = 3000) -> List
 _INTENT_PATTERNS: Dict[str, List[re.Pattern]] = {
     "OS_UPDATE_BUG": [
         re.compile(r'\b(ios|macos|watchos|ipados)\s*\d+(\.\d+)*\b', re.I),
-        re.compile(r'\b(update|updated|updating|boot\s*loop|kernel\s*panic|freeze|freezing|crash|crashes|crashing|lag|glitch|bug)\b', re.I),
+        re.compile(r'\b(update|updated|updating|boot\s*loop|kernel\s*panic|freeze|freezing|crash|crashes|crashing|lag|glitch|bug|slow|restart|loop)\b', re.I),
     ],
     "HARDWARE_BATTERY": [
-        re.compile(r'\b(battery\s*health|battery\s*drain|maximum\s*capacity|overheat|swelling|swollen|hot\s*to\s*the\s*touch)\b', re.I),
-        re.compile(r'\b(shattered|cracked\s*screen|broken\s*glass|charging\s*port|loose\s*port|earpiece|speaker\s*crackl|water\s*damage|submerged)\b', re.I),
+        re.compile(r'\b(battery|drain|maximum\s*capacity|overheat|swelling|swollen|hot\s*to\s*the\s*touch|charging|charge|charger|port|cable|power|dead)\b', re.I),
+        re.compile(r'\b(shattered|cracked\s*screen|broken\s*glass|loose\s*port|earpiece|speaker\s*crackl|water\s*damage|submerged|hardware|camera|speaker|mic)\b', re.I),
     ],
     "ACCOUNT_ICLOUD_SECURITY": [
-        re.compile(r'\b(apple\s*id|icloud|iforgot|2fa|two[- ]factor|verification\s*code|locked\s*account|disabled\s*account)\b', re.I),
-        re.compile(r'\b(phishing|suspicious\s*email|unauthorized\s*access|hacked|password\s*reset|trusted\s*number)\b', re.I),
+        re.compile(r'\b(apple\s*id|icloud|iforgot|2fa|two[- ]factor|verification\s*code|locked|disabled|passcode|password|account)\b', re.I),
+        re.compile(r'\b(phishing|suspicious\s*email|unauthorized\s*access|hacked|trusted\s*number|security|stolen)\b', re.I),
     ],
     "BILLING_SUBSCRIPTIONS": [
-        re.compile(r'\b(charged|refund|subscription|cancel\s*sub|receipt|invoice|billed|double\s*bill|payment\s*method\s*declined)\b', re.I),
-        re.compile(r'\b(app\s*store\s*charge|in-app\s*purchase|apple\s*arcade|apple\s*music\s*billing|apple\s*tv\+)\b', re.I),
+        re.compile(r'\b(charged|refund|subscription|cancel\s*sub|receipt|invoice|billed|double\s*bill|payment\s*method\s*declined|payment|money|cost|price|bill|pay)\b', re.I),
+        re.compile(r'\b(app\s*store\s*charge|in-app\s*purchase|apple\s*arcade|apple\s*music\s*billing|apple\s*music|apple\s*tv\+|itunes|in-app)\b', re.I),
     ],
     "CONNECTIVITY_SETUP": [
-        re.compile(r'\b(airdrop|bluetooth|airpods\s*disconnect|apple\s*watch\s*pair|pairing|carplay|hotspot|personal\s*hotspot)\b', re.I),
-        re.compile(r'\b(no\s*service|searching\.\.\.|carrier\s*settings|wifi\s*greyed|wi-fi\s*drop)\b', re.I),
+        re.compile(r'\b(airdrop|bluetooth|airpods\s*disconnect|apple\s*watch\s*pair|pairing|carplay|hotspot|personal\s*hotspot|airpods?|earbuds?|headphone)\b', re.I),
+        re.compile(r'\b(no\s*service|searching\.\.\.|carrier\s*settings|wifi\s*greyed|wi-fi\s*drop|wi-?fi|disconnect|cellular|data|signal|sim|carrier|drop)\b', re.I),
     ],
     "REPAIR_WARRANTY_STATUS": [
-        re.compile(r'\b(applecare|applecare\+|warranty|genius\s*bar|appointment|repair\s*status|repair\s*id|checkcoverage)\b', re.I),
-        re.compile(r'\b(cost\s*to\s*fix|service\s*quote|trade-in\s*value|send\s*in\s*for\s*repair)\b', re.I),
+        re.compile(r'\b(applecare|applecare\+|warranty|genius\s*bar|appointment|repair\s*status|repair\s*id|checkcoverage|replace|replacement|trade-in)\b', re.I),
+        re.compile(r'\b(cost\s*to\s*fix|service\s*quote|send\s*in\s*for\s*repair|repair|store)\b', re.I),
     ],
     "GENERAL_FEEDBACK_CHURN": [
         re.compile(r'\b(switching\s*to\s*android|worst\s*experience|customer\s*service|tim\s*cook|unacceptable|terrible\s*service)\b', re.I),
@@ -640,16 +648,20 @@ ADVERSARIAL_GOLDEN_CASES: List[Dict[str, Any]] = [
 ]
 
 
-def build_golden_evaluation_set(corpus: List[Dict[str, Any]], target_count: int = 200) -> List[Dict[str, Any]]:
+def build_golden_evaluation_set(
+    corpus: List[Dict[str, Any]], target_count: int = 200
+) -> Tuple[List[Dict[str, Any]], Set[str], Set[str]]:
     """
     Builds a golden evaluation set of `target_count` annotated test cases.
 
     Sources:
-      - ~10 hand-crafted adversarial edge cases (clearly labeled)
-      - ~190 samples from the corpus (with deduplication check against training data)
+      - 10 hand-crafted adversarial edge cases (clearly labeled)
+      - (target_count - 10) stratified samples from the corpus
 
-    The set is explicitly deduplicated against the training corpus to prevent
-    data leakage.
+    Deduplication Guarantee:
+      - Prints len(eligible) and sampled_ids for auditability.
+      - Returns (golden_cases, sampled_ids, sampled_texts) so the caller
+        removes these rows from the corpus snapshot BEFORE writing apple_support_corpus.json.
     """
     golden_cases: List[Dict[str, Any]] = []
 
@@ -657,13 +669,12 @@ def build_golden_evaluation_set(corpus: List[Dict[str, Any]], target_count: int 
     for case in ADVERSARIAL_GOLDEN_CASES:
         golden_cases.append(case)
 
-    # 2. Sample from corpus, then REMOVE those samples from the corpus
-    #    to prevent train/eval leakage
-    corpus_texts_lower = {c["customer_text"].lower().strip() for c in corpus}
+    # 2. Filter corpus to get eligible non-adversarial items
     adversarial_texts_lower = {c["customer_tweet"].lower().strip() for c in ADVERSARIAL_GOLDEN_CASES}
-
-    # Get eligible corpus items (not in adversarial set)
     eligible = [c for c in corpus if c["customer_text"].lower().strip() not in adversarial_texts_lower]
+    
+    # Print debug info as required
+    print(f"[DEBUG DEDUP] len(eligible) = {len(eligible)} (from input corpus size {len(corpus)})")
 
     # Stratified sampling: try to get roughly equal counts per intent
     remaining_needed = target_count - len(golden_cases)
@@ -673,13 +684,14 @@ def build_golden_evaluation_set(corpus: List[Dict[str, Any]], target_count: int 
     for item in eligible:
         by_intent.get(item.get("intent", "GENERAL_FEEDBACK_CHURN"), []).append(item)
 
-    sampled_ids: set = set()
+    sampled_ids: Set[str] = set()
+    sampled_texts: Set[str] = set()
     random.seed(42)
 
     for intent in INTENT_CLASSES:
         pool = by_intent.get(intent, [])
         random.shuffle(pool)
-        for item in pool[:per_intent + 5]:  # slight over-sample, trim later
+        for item in pool[:per_intent + 10]:  # sample from intent pool
             if len(golden_cases) >= target_count:
                 break
             case_id = f"gold_{len(golden_cases) + 1:03d}"
@@ -705,13 +717,36 @@ def build_golden_evaluation_set(corpus: List[Dict[str, Any]], target_count: int 
                 "notes": f"Sampled from {'Kaggle dataset' if item.get('source') == 'kaggle_twcs' else 'synthetic corpus'}.",
                 "source": item.get("source", "unknown"),
             })
-            sampled_ids.add(item.get("id"))
+            sampled_ids.add(item.get("id", ""))
+            sampled_texts.add(item["customer_text"].lower().strip())
 
-    # Trim to exact target count
+    # If still under target_count, sample from remaining eligible items
+    if len(golden_cases) < target_count:
+        for item in eligible:
+            if len(golden_cases) >= target_count:
+                break
+            if item["customer_text"].lower().strip() in sampled_texts:
+                continue
+            case_id = f"gold_{len(golden_cases) + 1:03d}"
+            escalate, esc_reason = label_escalation_heuristic(item["customer_text"], item["intent"])
+            golden_cases.append({
+                "id": case_id,
+                "customer_tweet": item["customer_text"],
+                "ground_truth_intent": item["intent"],
+                "reference_reply": item["agent_text"],
+                "ground_truth_escalation": escalate,
+                "escalation_reason": esc_reason,
+                "difficulty": "EASY",
+                "notes": "Sampled from Kaggle dataset.",
+                "source": item.get("source", "unknown"),
+            })
+            sampled_ids.add(item.get("id", ""))
+            sampled_texts.add(item["customer_text"].lower().strip())
+
     golden_cases = golden_cases[:target_count]
+    print(f"[DEBUG DEDUP] sampled_ids count = {len(sampled_ids)}, sample: {list(sampled_ids)[:5]}")
 
-    # Return the IDs that were sampled so the caller can remove them from the training corpus
-    return golden_cases, sampled_ids
+    return golden_cases, sampled_ids, sampled_texts
 
 
 def verify_no_leakage(corpus: List[Dict[str, Any]], golden_set: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -719,24 +754,27 @@ def verify_no_leakage(corpus: List[Dict[str, Any]], golden_set: List[Dict[str, A
     Verifies that there is ZERO exact-string overlap between the training
     corpus and the golden evaluation set.
 
-    Returns a dict with leakage statistics. Raises ValueError if leakage > 0.
+    Returns a dict with leakage statistics.
     """
     corpus_texts = {item["customer_text"].lower().strip() for item in corpus}
     golden_texts = {item["customer_tweet"].lower().strip() for item in golden_set}
 
     overlap = corpus_texts & golden_texts
     leakage_pct = (len(overlap) / len(golden_texts) * 100) if golden_texts else 0.0
+    is_clean = (len(overlap) == 0)
 
     result = {
         "corpus_size": len(corpus_texts),
         "golden_size": len(golden_texts),
         "exact_duplicates": len(overlap),
         "leakage_percentage": round(leakage_pct, 2),
-        "status": "CLEAN" if len(overlap) == 0 else "LEAKAGE_DETECTED",
+        "status": "CLEAN" if is_clean else "LEAKAGE_DETECTED",
+        "LEAKAGE_DETECTED": not is_clean,
+        "leakage_detected": not is_clean,
     }
 
     if overlap:
-        result["leaked_examples"] = list(overlap)[:5]  # Show first 5
+        result["leaked_examples"] = list(overlap)[:5]
         logger.error(
             "TRAIN/EVAL LEAKAGE DETECTED: %d exact duplicates (%.1f%%) between corpus and golden set!",
             len(overlap), leakage_pct
@@ -866,21 +904,25 @@ def initialize_data_directory():
     os.makedirs(DATA_DIR, exist_ok=True)
 
     # 1. Build corpus (from Kaggle or synthetic fallback)
-    corpus = build_corpus_from_kaggle(1500)
+    corpus = build_corpus_from_kaggle(1700)
 
     # 2. Build golden eval set (with deduplication)
-    golden, sampled_ids = build_golden_evaluation_set(corpus, 200)
+    golden, sampled_ids, sampled_texts = build_golden_evaluation_set(corpus, 200)
 
-    # 3. Remove golden samples from training corpus to prevent leakage
-    clean_corpus = [c for c in corpus if c.get("id") not in sampled_ids]
-    logger.info("Removed %d golden samples from corpus. Clean corpus: %d entries.",
-                len(corpus) - len(clean_corpus), len(clean_corpus))
+    # 3. Remove golden samples AND adversarial cases from the corpus snapshot
+    golden_texts = {g["customer_tweet"].lower().strip() for g in golden}
+    clean_corpus = [
+        c for c in corpus
+        if c.get("id") not in sampled_ids and c["customer_text"].lower().strip() not in golden_texts
+    ]
+    print(f"[DEDUP CONFIRMATION] Original corpus: {len(corpus)}, Clean corpus: {len(clean_corpus)} "
+          f"(Removed {len(corpus) - len(clean_corpus)} rows for golden set)")
 
     # 4. Verify no leakage
     leakage_report = verify_no_leakage(clean_corpus, golden)
     print(f"[LEAKAGE CHECK] {leakage_report['status']}: "
           f"{leakage_report['exact_duplicates']} exact duplicates "
-          f"({leakage_report['leakage_percentage']}%)")
+          f"({leakage_report['leakage_percentage']}%) | LEAKAGE_DETECTED: {leakage_report['LEAKAGE_DETECTED']}")
 
     # 5. Save corpus
     corpus_file = os.path.join(DATA_DIR, "apple_support_corpus.json")

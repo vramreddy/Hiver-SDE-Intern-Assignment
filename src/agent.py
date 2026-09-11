@@ -136,17 +136,9 @@ class AppleSupportAgent:
         Template-based reply generation grounded in historical resolutions.
         Used when GEMINI_API_KEY is not set.
         """
-        # If we have a high quality retrieved case, adapt from historical resolution
-        if retrieved_cases and retrieved_cases[0]["similarity_score"] > 0.40:
-            best_match = retrieved_cases[0]
-            base_reply = best_match["agent_text"]
+        q_lower = query.lower()
 
-            if escalation["decision"] == "ESCALATE_TO_HUMAN":
-                if "dm" not in base_reply.lower() and "message" not in base_reply.lower():
-                    base_reply += " Please send us a DM so an advisor can securely review your account details."
-            return base_reply
-
-        # Fallback calibrated template per intent and escalation decision
+        # Dedicated escalation routing replies
         if escalation["decision"] == "ESCALATE_TO_HUMAN":
             reason = escalation["escalation_reason"]
             if reason == "HARDWARE_PHYSICAL_DAMAGE":
@@ -160,33 +152,51 @@ class AppleSupportAgent:
             elif reason == "BILLING_REFUND_AUTH":
                 return ("We want to help resolve this billing concern quickly. Please submit a refund request "
                         "at https://reportaproblem.apple.com or send us a DM with your Apple ID email for review.")
+            elif reason == "LOW_CONFIDENCE_AMBIGUITY":
+                return ("We'd like to look into this with you! Please send us a DM with more details about "
+                        "your device model and what troubleshooting steps you've tried so far: https://apple.co/dm.")
             else:
-                return ("We'd like to look into this with you. Please send us a DM with your device model "
-                        "and iOS version: https://apple.co/dm.")
-        else:
-            templates = {
-                "OS_UPDATE_BUG": ("We'd like to help get this resolved. Have you tried a force restart on your "
-                                  "device? Follow these steps: https://apple.co/force-restart. Let us know if "
-                                  "the issue persists!"),
-                "HARDWARE_BATTERY": ("We can help you review your hardware and battery health. You can check "
-                                     "warranty status and find authorized service providers near you at "
-                                     "https://locate.apple.com."),
-                "ACCOUNT_ICLOUD_SECURITY": ("Account security is our priority. You can manage your Apple ID "
-                                            "and verify security settings securely at https://appleid.apple.com."),
-                "BILLING_SUBSCRIPTIONS": ("You can view your active subscriptions, recent purchases, and submit "
-                                          "refund requests directly at https://reportaproblem.apple.com."),
-                "CONNECTIVITY_SETUP": ("Let's troubleshoot your connection. Try toggling Airplane Mode, "
-                                       "restarting your device, and checking for carrier settings updates in "
-                                       "Settings > General > About."),
-                "REPAIR_WARRANTY_STATUS": ("You can easily check your warranty coverage, AppleCare+ status, "
-                                           "and schedule Genius Bar appointments at "
-                                           "https://checkcoverage.apple.com."),
-            }
-            return templates.get(
-                intent,
-                ("Thank you for reaching out to Apple Support! You can submit direct product feedback "
-                 "to our engineering teams anytime at https://apple.com/feedback.")
-            )
+                return ("We'd like to look into this securely with you. Please send us a DM with your details "
+                        "or visit https://iforgot.apple.com for account security: https://apple.co/dm.")
+
+        # If we have a high quality retrieved case for non-escalated queries, adapt from historical resolution
+        if retrieved_cases and retrieved_cases[0]["similarity_score"] > 0.45:
+            best_match = retrieved_cases[0]
+            return best_match["agent_text"]
+
+        # Fallback calibrated template per intent
+        if "airpod" in q_lower or "earbud" in q_lower:
+            return ("We'd like to help with your AirPods. Place both AirPods in the case, open the lid, "
+                    "and hold the setup button for 15 seconds to reset them: https://apple.co/reset-airpods.")
+
+        if "password" in q_lower or "passcode" in q_lower or "apple id" in q_lower or "locked" in q_lower:
+            return ("Account security is our top priority. We cannot process credentials over Twitter. "
+                    "You can securely reset your password or manage your account at https://iforgot.apple.com "
+                    "or DM us for guidance.")
+
+        templates = {
+            "OS_UPDATE_BUG": ("We'd like to help get this resolved. Have you tried a force restart on your "
+                              "device? Follow these steps: https://apple.co/force-restart. Let us know if "
+                              "the issue persists!"),
+            "HARDWARE_BATTERY": ("We can help you review your hardware and battery health. You can check "
+                                 "warranty status and find authorized service providers near you at "
+                                 "https://locate.apple.com."),
+            "ACCOUNT_ICLOUD_SECURITY": ("Account security is our priority. You can securely reset passwords "
+                                        "at https://iforgot.apple.com and manage security at https://appleid.apple.com."),
+            "BILLING_SUBSCRIPTIONS": ("You can view your active subscriptions, recent purchases, and submit "
+                                      "refund requests directly at https://reportaproblem.apple.com."),
+            "CONNECTIVITY_SETUP": ("Let's troubleshoot your connection. For AirPods, reset them in the case "
+                                   "(https://apple.co/reset-airpods). For cellular or Wi-Fi, toggle Airplane Mode "
+                                   "and check Settings > General > About for carrier updates."),
+            "REPAIR_WARRANTY_STATUS": ("You can easily check your warranty coverage, AppleCare+ status, "
+                                       "and schedule Genius Bar appointments at "
+                                       "https://checkcoverage.apple.com."),
+        }
+        return templates.get(
+            intent,
+            ("Thank you for reaching out to Apple Support! You can submit direct product feedback "
+             "to our engineering teams anytime at https://apple.com/feedback.")
+        )
 
     # ------------------------------------------------------------------ #
     #  Full Pipeline Execution

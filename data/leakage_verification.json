@@ -1,0 +1,9 @@
+{
+  "corpus_size": 1504,
+  "golden_size": 200,
+  "exact_duplicates": 0,
+  "leakage_percentage": 0.0,
+  "status": "CLEAN",
+  "LEAKAGE_DETECTED": false,
+  "leakage_detected": false
+}

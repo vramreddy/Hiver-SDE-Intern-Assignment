@@ -9,12 +9,12 @@ from typing import Dict, Any, Tuple
 from .config import ESCALATION_REASONS, AUTO_HANDLE_REASONS
 
 class EscalationPolicy:
-    def __init__(self, confidence_threshold: float = 0.30):
+    def __init__(self, confidence_threshold: float = 0.35):
         self.confidence_threshold = confidence_threshold
         
         # High Risk / Escalation Triggers
         self.pii_patterns = [
-            re.compile(r'\b(dm\s*me|send\s*dm|serial\s*number|imei|apple\s*id\s*email|locked\s*out|recovery\s*phone|hacked|stolen)\b', re.I),
+            re.compile(r'\b(dm\s*me|send\s*dm|serial\s*number|imei|apple\s*id\s*email|locked\s*out|recovery\s*phone|hacked|stolen|passcode|password)\b', re.I),
             re.compile(r'\b(repair\s*#|repair\s*id|fedex|shipping\s*address|tracking\s*number)\b', re.I)
         ]
         
@@ -33,6 +33,10 @@ class EscalationPolicy:
         self.sentiment_churn_patterns = [
             re.compile(r'\b(lawyer|attorney|sue|court|legal\s*action|bbb|ftc)\b', re.I),
             re.compile(r'\b(worst\s*(service|experience)|unacceptable|disgusting|supervisor|manager|tim\s*cook|switching\s*to\s*android|switching\s*to\s*samsung)\b', re.I)
+        ]
+
+        self.ambiguity_patterns = [
+            re.compile(r'\b(done\s*that\s*already|tried\s*that|didn\'?t\s*work|still\s*not\s*working|what\s*next)\b', re.I),
         ]
 
     def evaluate(self, text: str, intent: str, confidence: float, top_retrieved: list = None) -> Dict[str, Any]:
@@ -84,7 +88,18 @@ class EscalationPolicy:
                     "risk_level": "MEDIUM"
                 }
 
-        # 5. Low Model Confidence / Ambiguity
+        # 5. Semantic Ambiguity / Truncated Single-Turn Context
+        for pat in self.ambiguity_patterns:
+            if pat.search(text):
+                return {
+                    "decision": "ESCALATE_TO_HUMAN",
+                    "escalation_reason": "LOW_CONFIDENCE_AMBIGUITY",
+                    "reason_description": ESCALATION_REASONS["LOW_CONFIDENCE_AMBIGUITY"],
+                    "suggested_action": "Route query to human triage queue due to truncated conversation context.",
+                    "risk_level": "LOW"
+                }
+
+        # 6. Low Model Confidence
         if confidence < self.confidence_threshold:
             return {
                 "decision": "ESCALATE_TO_HUMAN",

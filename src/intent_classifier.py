@@ -28,22 +28,22 @@ class IntentClassifier:
                 re.compile(r'\b(safari\s*crash|lock\s*screen\s*stuck|stuck\s*on\s*apple\s*logo)\b', re.I)
             ],
             "HARDWARE_BATTERY": [
-                re.compile(r'\b(battery\s*health|battery\s*drain|maximum\s*capacity|overheat|swelling|swollen|hot\s*to\s*the\s*touch)\b', re.I),
+                re.compile(r'\b(battery\s*health|battery\s*drain|maximum\s*capacity|overheat|swelling|swollen|hot\s*to\s*the\s*touch|battery|charging|charge)\b', re.I),
                 re.compile(r'\b(shattered|cracked\s*screen|broken\s*glass|charging\s*port|loose\s*port|earpiece|speaker\s*crackl|water\s*damage|submerged)\b', re.I),
                 re.compile(r'\b(camera\s*lens|rattles|microphone\s*quiet|hardware)\b', re.I)
             ],
             "ACCOUNT_ICLOUD_SECURITY": [
-                re.compile(r'\b(apple\s*id|icloud|iforgot|2fa|two[- ]factor|verification\s*code|locked\s*account|disabled\s*account)\b', re.I),
-                re.compile(r'\b(phishing|suspicious\s*email|unauthorized\s*access|hacked|password\s*reset|trusted\s*number)\b', re.I),
+                re.compile(r'\b(apple\s*id|icloud|iforgot|2fa|two[- ]factor|verification\s*code|locked\s*account|disabled\s*account|passcode|password)\b', re.I),
+                re.compile(r'\b(phishing|suspicious\s*email|unauthorized\s*access|hacked|password\s*reset|trusted\s*number|security)\b', re.I),
                 re.compile(r'\b(icloud\s*storage\s*full|storage\s*sync|photo\s*sync)\b', re.I)
             ],
             "BILLING_SUBSCRIPTIONS": [
-                re.compile(r'\b(charged|refund|subscription|cancel\s*sub|receipt|invoice|billed|double\s*bill|payment\s*method\s*declined)\b', re.I),
-                re.compile(r'\b(app\s*store\s*charge|reportaproblem|in-app\s*purchase|apple\s*arcade|apple\s*music\s*billing)\b', re.I)
+                re.compile(r'\b(charged|refund|subscription|cancel\s*sub|receipt|invoice|billed|double\s*bill|payment\s*method\s*declined|payment)\b', re.I),
+                re.compile(r'\b(app\s*store\s*charge|reportaproblem|in-app\s*purchase|apple\s*arcade|apple\s*music\s*billing|apple\s*music|apple\s*tv\+)\b', re.I)
             ],
             "CONNECTIVITY_SETUP": [
-                re.compile(r'\b(airdrop|bluetooth|airpods\s*disconnect|apple\s*watch\s*pair|pairing|carplay|hotspot|personal\s*hotspot)\b', re.I),
-                re.compile(r'\b(no\s*service|searching\.\.\.|carrier\s*settings|wifi\s*greyed|wi-fi\s*drop)\b', re.I)
+                re.compile(r'\b(airdrop|bluetooth|airpods\s*disconnect|apple\s*watch\s*pair|pairing|carplay|hotspot|personal\s*hotspot|airpods?|earbuds?)\b', re.I),
+                re.compile(r'\b(no\s*service|searching\.\.\.|carrier\s*settings|wifi\s*greyed|wi-fi\s*drop|wi-?fi|disconnect)\b', re.I)
             ],
             "REPAIR_WARRANTY_STATUS": [
                 re.compile(r'\b(applecare|applecare\+|warranty|genius\s*bar|appointment|repair\s*status|repair\s*id|checkcoverage)\b', re.I),

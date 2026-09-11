@@ -141,3 +141,66 @@ class TestAdversarialGoldenCases:
     def test_adversarial_cases_have_hard_difficulty(self):
         hard_count = sum(1 for c in ADVERSARIAL_GOLDEN_CASES if c["difficulty"] == "HARD")
         assert hard_count >= 5  # Most adversarial cases should be hard
+
+
+class TestGoldenCorpusDeduplication:
+    """CI regression tests to ensure 0% train/eval leakage and proper deduplication."""
+
+    def test_no_golden_corpus_overlap(self):
+        """Verifies zero exact-string overlap between generated apple_support_corpus.json and golden_eval_set.json."""
+        import os
+        import json
+        from src.data_pipeline import DATA_DIR
+
+        corpus_path = os.path.join(DATA_DIR, "apple_support_corpus.json")
+        golden_path = os.path.join(DATA_DIR, "golden_eval_set.json")
+        leakage_path = os.path.join(DATA_DIR, "leakage_verification.json")
+
+        assert os.path.exists(corpus_path), "apple_support_corpus.json must exist"
+        assert os.path.exists(golden_path), "golden_eval_set.json must exist"
+        assert os.path.exists(leakage_path), "leakage_verification.json must exist"
+
+        with open(corpus_path, "r", encoding="utf-8") as f:
+            corpus = json.load(f)
+        with open(golden_path, "r", encoding="utf-8") as f:
+            golden = json.load(f)
+        with open(leakage_path, "r", encoding="utf-8") as f:
+            leakage_meta = json.load(f)
+
+        res = verify_no_leakage(corpus, golden)
+        assert res["status"] == "CLEAN"
+        assert res["exact_duplicates"] == 0
+        assert res["leakage_percentage"] == 0.0
+        assert res["LEAKAGE_DETECTED"] is False
+        assert leakage_meta.get("LEAKAGE_DETECTED") is False or leakage_meta.get("leakage_detected") is False
+
+    def test_build_golden_evaluation_set_dedup(self):
+        """Verifies build_golden_evaluation_set removes sampled items without leakage."""
+        from src.data_pipeline import build_golden_evaluation_set
+
+        mock_corpus = [
+            {
+                "id": f"item_{i}",
+                "customer_text": f"@AppleSupport Test query message {i} for evaluation",
+                "intent": INTENT_CLASSES[i % len(INTENT_CLASSES)],
+                "agent_text": f"Agent reply to query {i}",
+                "source": "test_synthetic",
+            }
+            for i in range(100)
+        ]
+
+        golden, sampled_ids, sampled_texts = build_golden_evaluation_set(mock_corpus, target_count=30)
+        assert len(golden) == 30
+        assert len(sampled_ids) > 0
+
+        golden_texts = {g["customer_tweet"].lower().strip() for g in golden}
+        clean_corpus = [
+            c for c in mock_corpus
+            if c["id"] not in sampled_ids and c["customer_text"].lower().strip() not in golden_texts
+        ]
+
+        res = verify_no_leakage(clean_corpus, golden)
+        assert res["status"] == "CLEAN"
+        assert res["exact_duplicates"] == 0
+        assert res["LEAKAGE_DETECTED"] is False
+
